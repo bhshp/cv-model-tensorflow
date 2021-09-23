@@ -5,17 +5,20 @@ if tf.__version__.startswith('2.'):
     tf.disable_v2_behavior()
 tf.disable_eager_execution()
 
-OUTPUT_PATH='./result'
+OUTPUT_PATH = './result'
+OUTPUT_PB_PATH = OUTPUT_PATH + '/frozen.pb'
 
-convert = tf.lite.TFLiteConverter.from_frozen_graph(OUTPUT_PATH + '/frozen.pb', input_arrays=['data'], output_arrays=['softmax'])
-convert.post_training_quantize=False
+convert = tf.lite.TFLiteConverter.from_frozen_graph(
+    OUTPUT_PB_PATH, input_arrays=['data'], output_arrays=['softmax'])
+convert.post_training_quantize = False
 tflite_model = convert.convert()
 
 with open(OUTPUT_PATH + '/model.tflite', 'wb') as f:
     f.write(tflite_model)
 
-convert = tf.lite.TFLiteConverter.from_frozen_graph(OUTPUT_PATH + '/frozen.pb', input_arrays=['data'], output_arrays=['softmax'])
-convert.post_training_quantize=True
+convert = tf.lite.TFLiteConverter.from_frozen_graph(
+    OUTPUT_PB_PATH, input_arrays=['data'], output_arrays=['softmax'])
+convert.post_training_quantize = True
 tflite_model = convert.convert()
 
 with open(OUTPUT_PATH + '/model_quant.tflite', 'wb') as f:

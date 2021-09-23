@@ -1,7 +1,7 @@
 # %tensorflow_version 1.x
-import pickle
 import cv2
 import numpy as np
+import pickle
 import tensorflow as tf
 
 print(tf.__version__)

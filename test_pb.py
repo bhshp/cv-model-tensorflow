@@ -1,8 +1,8 @@
-from tensorflow.python.platform import gfile
-import tensorflow as tf
+import cv2
 import numpy as np
 import pickle
-import cv2
+import tensorflow as tf
+from tensorflow.python.platform import gfile
 
 
 if tf.__version__.startswith('2.'):
@@ -10,9 +10,10 @@ if tf.__version__.startswith('2.'):
     tf.disable_v2_behavior()
 tf.disable_eager_execution()
 
-DATA_PATH='./data/cifar-10-batches-py'
+DATA_PATH = './data/cifar-10-batches-py'
 IMAGE_SIZE = 115
-OUTPUT_PATH='./result'
+OUTPUT_PATH = './result'
+
 
 def get_data():
     labels = []
@@ -21,8 +22,8 @@ def get_data():
 
     def preprocess_images(image):
         image.resize((32, 32, 3))
-        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32) # .reshape(IMAGE_SIZE, IMAGE_SIZE, 3)
-
+        # .reshape(IMAGE_SIZE, IMAGE_SIZE, 3)
+        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32)
 
     with open(DATA_PATH + '/test_batch', 'rb') as f:
         test_data = pickle.load(f, encoding='bytes')
@@ -31,6 +32,7 @@ def get_data():
     test_images = [preprocess_images(image) for image in test_images]
 
     return labels, np.asarray(test_images), test_labels
+
 
 labels, test_images, test_labels = get_data()
 
