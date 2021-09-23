@@ -1,7 +1,8 @@
 import tensorflow as tf
 
-tf = tf.compat.v1
-tf.disable_v2_behavior()
+if tf.__version__.startswith('2.'):
+    tf = tf.compat.v1
+    tf.disable_v2_behavior()
 tf.disable_eager_execution()
 
 OUTPUT_PATH='./result'

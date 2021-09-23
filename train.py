@@ -6,14 +6,16 @@ import tensorflow as tf
 
 print(tf.__version__)
 
-tf = tf.compat.v1
-tf.disable_v2_behavior()
+if tf.__version__.startswith('2.'):
+    tf = tf.compat.v1
+    tf.disable_v2_behavior()
 tf.logging.set_verbosity(tf.logging.INFO)
 tf.disable_eager_execution()
 
 IMAGE_SIZE = 115
 # DATA_PATH = '/content/drive/MyDrive/cifar-10-batches-py'
 DATA_PATH = './data/cifar-10-batches-py'
+INPUT_CKPT_PATH = './model/model.ckpt-1'
 OUTPUT_PATH = './result'
 # default padding valid
 
@@ -278,8 +280,8 @@ eval_input_fn = tf.estimator.inputs.numpy_input_fn(
 eval_results = classifier.evaluate(input_fn=eval_input_fn)
 print(eval_results)
 
-INPUT_CKPT_PATH = './model/model.ckpt-1'
-saver = tf.train.import_meta_graph(INPUT_CKPT_PATH + '.meta', clear_devices=True)
+saver = tf.train.import_meta_graph(
+    INPUT_CKPT_PATH + '.meta', clear_devices=True)
 graph = tf.get_default_graph()
 input_graph_def = graph.as_graph_def()
 

@@ -1,11 +1,13 @@
 from tensorflow.python.platform import gfile
-import tensorflow
+import tensorflow as tf
 import numpy as np
 import pickle
 import cv2
 
-tf = tensorflow.compat.v1
-tf.disable_v2_behavior()
+
+if tf.__version__.startswith('2.'):
+    tf = tf.compat.v1
+    tf.disable_v2_behavior()
 tf.disable_eager_execution()
 
 DATA_PATH='./data/cifar-10-batches-py'
@@ -19,7 +21,7 @@ def get_data():
 
     def preprocess_images(image):
         image.resize((32, 32, 3))
-        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float16) # .reshape(IMAGE_SIZE, IMAGE_SIZE, 3)
+        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32) # .reshape(IMAGE_SIZE, IMAGE_SIZE, 3)
 
 
     with open(DATA_PATH + '/test_batch', 'rb') as f:
