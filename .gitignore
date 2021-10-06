@@ -1,5 +1,7 @@
-model/
-result/
+one_branch_model/
+one_branch_result/
+two_branch_model/
+two_branch_result/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

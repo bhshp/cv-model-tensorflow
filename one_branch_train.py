@@ -15,8 +15,8 @@ tf.disable_eager_execution()
 IMAGE_SIZE = 115
 # DATA_PATH = '/content/drive/MyDrive/cifar-10-batches-py'
 DATA_PATH = './data/cifar-10-batches-py'
-INPUT_CKPT_PATH = './model/model.ckpt-1'
-OUTPUT_PATH = './result'
+INPUT_CKPT_PATH = './one_branch_model/model.ckpt-1'
+OUTPUT_PATH = './one_branch_result'
 # default padding valid
 
 
@@ -34,11 +34,6 @@ def AlexNet(features, labels, mode):
     }
 
     biases = {
-        'bc1': tf.Variable(tf.constant(0.0, shape=[96]), name='bc1'),
-        'bc2': tf.Variable(tf.constant(1.0, shape=[256]), name='bc2'),
-        'bc3': tf.Variable(tf.constant(0.0, shape=[384]), name='bc3'),
-        'bc4': tf.Variable(tf.constant(1.0, shape=[384]), name='bc4'),
-        'bc5': tf.Variable(tf.constant(1.0, shape=[256]), name='bc5'),
         'bf1': tf.Variable(tf.constant(1.0, shape=[4096]), name='bf1'),
         'bf2': tf.Variable(tf.constant(1.0, shape=[4096]), name='bf2'),
         'bf3': tf.Variable(tf.constant(1.0, shape=[1000]), name='bf3')
@@ -53,7 +48,6 @@ def AlexNet(features, labels, mode):
                          strides=[1, 2, 2, 1],
                          padding='VALID',
                          name='conv1')
-    # conv1 = tf.layers.conv2d(inputs=input_layer, filters=96, kernel_size=7, strides=2, activation=tf.nn.relu, name='conv1')
 
     relu1 = tf.nn.relu(features=conv1,
                        name='relu1')
@@ -70,7 +64,6 @@ def AlexNet(features, labels, mode):
                                     strides=2,
                                     padding='VALID',
                                     name='max_pooling1')
-    # max_pooling1 = tf.layers.max_pooling2d(inputs=lrn1, pool_size=3, strides=2, name='max_pooling1')
 
     # 2nd conv layer
     conv2 = tf.nn.conv2d(input=max_pooling1,
@@ -78,7 +71,6 @@ def AlexNet(features, labels, mode):
                          strides=[1, 1, 1, 1],
                          padding='SAME',
                          name='conv2')
-    # conv2 = tf.layers.conv2d(inputs=max_pooling1, filters=256, kernel_size=5, strides=1, padding='same', activation=tf.nn.relu, name='conv2')
 
     relu2 = tf.nn.relu(features=conv2,
                        name='relu2')
@@ -95,7 +87,6 @@ def AlexNet(features, labels, mode):
                                     strides=2,
                                     padding='VALID',
                                     name='max_pooling2')
-    # max_pooling2 = tf.layers.max_pooling2d(inputs=lrn2, pool_size=3, strides=2, name='max_pooling2')
 
     # 3rd conv layer
     conv3 = tf.nn.conv2d(input=max_pooling2,
@@ -103,7 +94,6 @@ def AlexNet(features, labels, mode):
                          strides=[1, 1, 1, 1],
                          padding='SAME',
                          name='conv3')
-    # conv3 = tf.layers.conv2d(inputs=max_pooling2, filters=384, kernel_size=3, strides=1, padding='same', activation=tf.nn.relu, name='conv3')
 
     relu3 = tf.nn.relu(features=conv3,
                        name='relu3')
@@ -114,7 +104,6 @@ def AlexNet(features, labels, mode):
                          strides=[1, 1, 1, 1],
                          padding='SAME',
                          name='conv4')
-    # conv4 = tf.layers.conv2d(inputs=conv3, filters=384, kernel_size=3, strides=1, padding='same', activation=tf.nn.relu, name='conv4')
 
     relu4 = tf.nn.relu(features=conv4,
                        name='relu4')
@@ -125,7 +114,6 @@ def AlexNet(features, labels, mode):
                          strides=[1, 1, 1, 1],
                          padding='SAME',
                          name='conv5')
-    # conv5 = tf.layers.conv2d(inputs=conv4, filters=256, kernel_size=3, strides=1, padding='same', activation=tf.nn.relu, name='conv5')
 
     relu5 = tf.nn.relu(features=conv5,
                        name='relu5')
@@ -135,7 +123,6 @@ def AlexNet(features, labels, mode):
                                     strides=2,
                                     padding='VALID',
                                     name='max_pooling3')
-    # max_pooling3 = tf.layers.max_pooling2d(inputs=conv5, pool_size=3, strides=2, name='max_pooling3')
 
     # flatten 5th conv layer
     reshape = tf.reshape(max_pooling3,
@@ -151,16 +138,6 @@ def AlexNet(features, labels, mode):
     relu6 = tf.nn.relu(features=fc1,
                        name='relu6')
 
-    # V2
-    # dropout1 = tf.nn.dropout(x=relu6,
-    #                          rate=0.5,
-    #                          name='dropout1')
-
-    # V1
-    # fc1 = tf.layers.dense(inputs=reshape, units=512,
-    #                       activation=tf.nn.relu, name='fc1')
-    # dropout1 = tf.layers.dropout(inputs=fc1, rate=0.5, name='dropout1')
-
     # 2nd fc layer
     fc2 = tf.nn.xw_plus_b(relu6,
                           weights['wf2'],
@@ -170,21 +147,12 @@ def AlexNet(features, labels, mode):
     relu7 = tf.nn.relu(features=fc2,
                        name='relu7')
 
-    # V2
-    # dropout2 = tf.nn.dropout(x=relu7,
-    #                          rate=0.5,
-    #                          name='dropout2')
-
-    # fc2 = tf.layers.dense(inputs=dropout1, units=512,
-    #                       activation=tf.nn.relu, name='fc2')
-    # dropout2 = tf.layers.dropout(inputs=fc2, rate=0.5, name='dropout2')
 
     # 3rd fc layer, also logit layer
     fc3 = tf.nn.xw_plus_b(relu7,
                           weights['wf3'],
                           biases['bf3'],
                           name='logit')
-    # fc3 = tf.layers.dense(inputs=dropout2, units=10, name='logit')
 
     logits = fc3
 
@@ -229,16 +197,10 @@ def get_data():
 
     def preprocess_images(image):
         image.resize((32, 32, 3))
-        # .reshape(IMAGE_SIZE, IMAGE_SIZE, 3)
         return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32)
 
     train_images = [preprocess_images(image) for image in train_images]
 
-    # with open(DATA_PATH + '/test_batch', 'rb') as f:
-    #     test_data = pickle.load(f, encoding='bytes')
-    #     test_images, test_labels = test_data[b'data'], test_data[b'labels']
-
-    # , np.asarray(test_images), np.asarray(test_labels)
     return labels, np.asarray(train_images), np.asarray(train_labels)
 
 
@@ -248,7 +210,7 @@ eval_images, eval_labels = train_images[:500], train_labels[:500]
 train_images, train_labels = train_images[500:], train_labels[500:]
 
 classifier = tf.estimator.Estimator(
-    model_fn=AlexNet, model_dir='./model'
+    model_fn=AlexNet, model_dir='./one_branch_model'
 )
 
 tensor_to_log = {'probabilities': 'softmax'}
