@@ -38,6 +38,7 @@ def AlexNet(features, labels, mode):
         'bf2': tf.Variable(tf.constant(1.0, shape=[4096]), name='bf2'),
         'bf3': tf.Variable(tf.constant(1.0, shape=[1000]), name='bf3')
     }
+
     input_layer = tf.reshape(features['x'],
                              [-1, IMAGE_SIZE, IMAGE_SIZE, 3],
                              name='data')
