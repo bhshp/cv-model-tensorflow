@@ -53,14 +53,14 @@ def AlexNet(features, labels, mode):
     relu1 = tf.nn.relu(features=conv1,
                        name='relu1')
 
-    lrn1 = tf.nn.lrn(input=relu1,
-                     depth_radius=5.0,
-                     bias=2.0,
-                     alpha=1e-4,
-                     beta=0.75,
-                     name='lru1')
+    # lrn1 = tf.nn.lrn(input=relu1,
+    #                  depth_radius=5.0,
+    #                  bias=2.0,
+    #                  alpha=1e-4,
+    #                  beta=0.75,
+    #                  name='lru1')
 
-    max_pooling1 = tf.nn.max_pool2d(input=lrn1,
+    max_pooling1 = tf.nn.max_pool2d(input=relu1,
                                     ksize=3,
                                     strides=2,
                                     padding='VALID',
@@ -76,14 +76,14 @@ def AlexNet(features, labels, mode):
     relu2 = tf.nn.relu(features=conv2,
                        name='relu2')
 
-    lrn2 = tf.nn.lrn(input=relu2,
-                     depth_radius=5.0,
-                     bias=2.0,
-                     alpha=1e-4,
-                     beta=0.75,
-                     name='lru2')
+    # lrn2 = tf.nn.lrn(input=relu2,
+    #                  depth_radius=5.0,
+    #                  bias=2.0,
+    #                  alpha=1e-4,
+    #                  beta=0.75,
+    #                  name='lru2')
 
-    max_pooling2 = tf.nn.max_pool2d(input=lrn2,
+    max_pooling2 = tf.nn.max_pool2d(input=relu2,
                                     ksize=3,
                                     strides=2,
                                     padding='VALID',
