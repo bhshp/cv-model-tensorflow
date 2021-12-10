@@ -13,10 +13,9 @@ tf.logging.set_verbosity(tf.logging.INFO)
 tf.disable_eager_execution()
 
 IMAGE_SIZE = 115
-# DATA_PATH = '/content/drive/MyDrive/cifar-10-batches-py'
-DATA_PATH = './data/cifar-10-batches-py'
-INPUT_CKPT_PATH = './one_branch_model/model.ckpt-1'
-OUTPUT_PATH = './one_branch_result'
+DATA_PATH = './../../data'
+INPUT_CKPT_PATH = './model/model.ckpt-1'
+OUTPUT_PATH = './result'
 # default padding valid
 
 
@@ -211,7 +210,7 @@ eval_images, eval_labels = train_images[:500], train_labels[:500]
 train_images, train_labels = train_images[500:], train_labels[500:]
 
 classifier = tf.estimator.Estimator(
-    model_fn=AlexNet, model_dir='./one_branch_model'
+    model_fn=AlexNet, model_dir='./model'
 )
 
 tensor_to_log = {'probabilities': 'softmax'}

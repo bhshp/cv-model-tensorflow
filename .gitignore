@@ -1,7 +1,7 @@
-AlexNet/one_branch_model/
-AlexNet/one_branch_result/
-AlexNet/two_branch_model/
-AlexNet/two_branch_result/
+AlexNet/one_branch/model/
+AlexNet/one_branch/result/
+AlexNet/two_branch/model/
+AlexNet/two_branch/result/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -6,7 +6,7 @@ if tf.__version__.startswith('2.'):
     tf.disable_v2_behavior()
 tf.disable_eager_execution()
 
-OUTPUT_PATH = './one_branch_result'
+OUTPUT_PATH = './result'
 OUTPUT_PB_PATH = OUTPUT_PATH + '/frozen.pb'
 
 def convert_to_tflite():
@@ -33,5 +33,5 @@ def convert_to_quant_tflite():
         f.write(tflite_model)
 
 if __name__ == '__main__':
-    # convert_to_tflite()
-    convert_to_quant_tflite()
+    convert_to_tflite()
+    # convert_to_quant_tflite()
