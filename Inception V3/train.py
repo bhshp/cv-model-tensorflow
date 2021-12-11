@@ -110,8 +110,8 @@ def Inception_V3(features, labels, mode):
         'conv_15_2_2_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
         'conv_15_3_1': tf.Variable(tf.random_normal([1, 1, 1280, 448])),
         'conv_15_3_2': tf.Variable(tf.random_normal([3, 3, 448, 384])),
-        'conv_15_3_3': tf.Variable(tf.random_normal([1, 3, 384, 384])),
-        'conv_15_3_4': tf.Variable(tf.random_normal([3, 1, 384, 384])),
+        'conv_15_3_3_1': tf.Variable(tf.random_normal([1, 3, 384, 384])),
+        'conv_15_3_3_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
         'conv_15_4_2': tf.Variable(tf.random_normal([1, 1, 1280, 192])),
         'conv_16_1': tf.Variable(tf.random_normal([1, 1, 2048, 320])),
         'conv_16_2_1': tf.Variable(tf.random_normal([1, 1, 2048, 384])),
@@ -119,8 +119,8 @@ def Inception_V3(features, labels, mode):
         'conv_16_2_2_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
         'conv_16_3_1': tf.Variable(tf.random_normal([1, 1, 2048, 448])),
         'conv_16_3_2': tf.Variable(tf.random_normal([3, 3, 448, 384])),
-        'conv_16_3_3': tf.Variable(tf.random_normal([1, 3, 384, 384])),
-        'conv_16_3_4': tf.Variable(tf.random_normal([3, 1, 384, 384])),
+        'conv_16_3_3_1': tf.Variable(tf.random_normal([1, 3, 384, 384])),
+        'conv_16_3_3_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
         'conv_16_4_2': tf.Variable(tf.random_normal([1, 1, 2048, 192])),
         'conv_17': tf.Variable(tf.random_normal([1, 1, 2048, 1001]))
     }
@@ -1075,7 +1075,7 @@ def Inception_V3(features, labels, mode):
                                  filters=weights['conv_15_3_3_2'],
                                  strides=[1, 1, 1, 1],
                                  padding='SAME',
-                                 name='conv_15_3_3_1')
+                                 name='conv_15_3_3_2')
 
     relu_15_3_3_2 = tf.nn.relu(features=conv_15_3_3_2,
                                name='relu_15_3_3_2')
@@ -1180,7 +1180,7 @@ def Inception_V3(features, labels, mode):
                                  filters=weights['conv_16_3_3_2'],
                                  strides=[1, 1, 1, 1],
                                  padding='SAME',
-                                 name='conv_16_3_3_1')
+                                 name='conv_16_3_3_2')
 
     relu_16_3_3_2 = tf.nn.relu(features=conv_16_3_3_2,
                                name='relu_16_3_3_2')
