@@ -2,24 +2,20 @@ import cv2
 import numpy as np
 import pickle
 import tensorflow as tf
-
 print(tf.__version__)
+
+from tensorflow.python.ops.numpy_ops import np_config
+np_config.enable_numpy_behavior()
 
 if tf.__version__.startswith('2.'):
     tf = tf.compat.v1
     tf.disable_v2_behavior()
-tf.device('/gpu:0')
 tf.disable_eager_execution()
-
-tf.test.is_gpu_available(
-    cuda_only=True, min_cuda_compute_capability=None
-)
 
 IMAGE_SIZE = 299
 DATA_PATH = './../data'
 INPUT_CKPT_PATH = './model/model.ckpt-1'
 OUTPUT_PATH = './result'
-# default padding valid
 
 
 def Inception_V3(features, labels, mode):
@@ -59,11 +55,11 @@ def Inception_V3(features, labels, mode):
         'conv_9_3_2': tf.Variable(tf.random_normal([3, 3, 64, 96])),
         'conv_9_3_3': tf.Variable(tf.random_normal([3, 3, 96, 96])),
         'conv_10_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_10_2_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_10_2_2': tf.Variable(tf.random_normal([1, 7, 768, 128])),
-        'conv_10_2_3': tf.Variable(tf.random_normal([7, 1, 768, 192])),
+        'conv_10_2_1': tf.Variable(tf.random_normal([1, 1, 768, 128])),
+        'conv_10_2_2': tf.Variable(tf.random_normal([1, 7, 128, 128])),
+        'conv_10_2_3': tf.Variable(tf.random_normal([7, 1, 128, 192])),
         'conv_10_3_1': tf.Variable(tf.random_normal([1, 1, 768, 128])),
-        'conv_10_3_2': tf.Variable(tf.random_normal([7, 1, 768, 128])),
+        'conv_10_3_2': tf.Variable(tf.random_normal([7, 1, 128, 128])),
         'conv_10_3_3': tf.Variable(tf.random_normal([1, 7, 128, 128])),
         'conv_10_3_4': tf.Variable(tf.random_normal([7, 1, 128, 128])),
         'conv_10_3_5': tf.Variable(tf.random_normal([1, 7, 128, 192])),
@@ -250,10 +246,10 @@ def Inception_V3(features, labels, mode):
                             name='relu_6_3_3')
 
     # filter_size=3 same stride=1
-    average_pool_6_4_1 = tf.nn.avg_pool2d(input=max_pooling_2,
-                                          filter_size=3,
-                                          padding='SAME',
+    average_pool_6_4_1 = tf.nn.avg_pool2d(value=max_pooling_2,
+                                          ksize=3,
                                           strides=1,
+                                          padding='SAME',
                                           name='average_pool_6_4_1')
 
     # 32*1*1*192 same stride=1
@@ -331,10 +327,10 @@ def Inception_V3(features, labels, mode):
                             name='relu_7_3_3')
 
     # filter_size=3 same stride=1
-    average_pool_7_4_1 = tf.nn.avg_pool2d(input=concat_1,
-                                          filter_size=3,
-                                          padding='SAME',
+    average_pool_7_4_1 = tf.nn.avg_pool2d(value=concat_1,
+                                          ksize=3,
                                           strides=1,
+                                          padding='SAME',
                                           name='average_pool_7_4_1')
 
     # 64*1*1*256 same stride=1
@@ -412,10 +408,10 @@ def Inception_V3(features, labels, mode):
                             name='relu_8_3_3')
 
     # filter_size=3 same stride=1
-    average_pool_8_4_1 = tf.nn.avg_pool2d(input=concat_2,
-                                          filter_size=3,
-                                          padding='SAME',
+    average_pool_8_4_1 = tf.nn.avg_pool2d(value=concat_2,
+                                          ksize=3,
                                           strides=1,
+                                          padding='SAME',
                                           name='average_pool_8_4_1')
 
     # 64*1*1*288 same stride=1
@@ -440,7 +436,7 @@ def Inception_V3(features, labels, mode):
                                        name='max_pooling_9_1')
 
     # 384*3*3*288 valid stride=2
-    conv_9_2 = tf.nn.conv2d(input=max_pooling_9_1,
+    conv_9_2 = tf.nn.conv2d(input=concat_3,
                             filters=weights['conv_9_2'],
                             strides=[1, 2, 2, 1],
                             padding='VALID',
@@ -450,7 +446,7 @@ def Inception_V3(features, labels, mode):
                           name='relu_9_2')
 
     # 64*1*1*288 same stride=1
-    conv_9_3_1 = tf.nn.conv2d(input=max_pooling_9_1,
+    conv_9_3_1 = tf.nn.conv2d(input=concat_3,
                               filters=weights['conv_9_3_1'],
                               strides=[1, 1, 1, 1],
                               padding='SAME',
@@ -503,7 +499,7 @@ def Inception_V3(features, labels, mode):
     relu_10_2_1 = tf.nn.relu(features=conv_10_2_1,
                              name='relu_10_2_1')
 
-    # 128*1*7*768 same stride=1
+    # 128*1*7*128 same stride=1
     conv_10_2_2 = tf.nn.conv2d(input=relu_10_2_1,
                                filters=weights['conv_10_2_2'],
                                strides=[1, 1, 1, 1],
@@ -513,7 +509,7 @@ def Inception_V3(features, labels, mode):
     relu_10_2_2 = tf.nn.relu(features=conv_10_2_2,
                              name='relu_10_2_2')
 
-    # 192*7*1*768 same stride=1
+    # 192*7*1*128 same stride=1
     conv_10_2_3 = tf.nn.conv2d(input=relu_10_2_2,
                                filters=weights['conv_10_2_3'],
                                strides=[1, 1, 1, 1],
@@ -533,7 +529,7 @@ def Inception_V3(features, labels, mode):
     relu_10_3_1 = tf.nn.relu(features=conv_10_3_1,
                              name='relu_10_3_1')
 
-    # 128*7*1*768 same stride=1
+    # 128*7*1*128 same stride=1
     conv_10_3_2 = tf.nn.conv2d(input=relu_10_3_1,
                                filters=weights['conv_10_3_2'],
                                strides=[1, 1, 1, 1],
@@ -928,7 +924,7 @@ def Inception_V3(features, labels, mode):
         values=[relu_13_1, relu_13_2_3, relu_13_3_5, relu_13_4_2], axis=3, name='concat_7')
 
     # filter_size=3 valid stride=2
-    max_pooling_14_1 = tf.nn.max_pool2d(value=concat_8,
+    max_pooling_14_1 = tf.nn.max_pool2d(input=concat_8,
                                         ksize=[1, 3, 3, 1],
                                         strides=[1, 2, 2, 1],
                                         padding='VALID',
@@ -947,7 +943,7 @@ def Inception_V3(features, labels, mode):
     # 320*3*3*192 valid stride=1
     conv_14_2_2 = tf.nn.conv2d(input=relu_14_2_1,
                                filters=weights['conv_14_2_2'],
-                               strides=[1, 1, 1, 1],
+                               strides=[1, 2, 2, 1],
                                padding='VALID',
                                name='conv_14_2_2')
 
@@ -984,11 +980,11 @@ def Inception_V3(features, labels, mode):
     relu_14_3_3 = tf.nn.relu(features=conv_14_3_3,
                              name='relu_14_3_3')
 
-    # 192*3*3*192 same stride=1
+    # 192*3*3*192 valid stride=2
     conv_14_3_4 = tf.nn.conv2d(input=relu_14_3_3,
                                filters=weights['conv_14_3_4'],
-                               strides=[1, 1, 1, 1],
-                               padding='SAME',
+                               strides=[1, 2, 2, 1],
+                               padding='VALID',
                                name='conv_14_3_4')
 
     relu_14_3_4 = tf.nn.relu(features=conv_14_3_4,
@@ -1084,8 +1080,8 @@ def Inception_V3(features, labels, mode):
         values=[relu_15_3_3_1, relu_15_3_3_2], axis=3, name='concat_15_3_4')
 
     # filter_size=3 same stride=1
-    average_pool_15_4_1 = tf.nn.avg_pool2d(input=concat_9,
-                                           filter=[1, 3, 3, 1],
+    average_pool_15_4_1 = tf.nn.avg_pool2d(value=concat_9,
+                                           ksize=3,
                                            strides=[1, 1, 1, 1],
                                            padding='SAME',
                                            name='average_pool_15_4_1')
@@ -1102,7 +1098,8 @@ def Inception_V3(features, labels, mode):
 
     # 108
     concat_10 = tf.concat(
-        values=[relu_15_1, concat_15_2_3, concat_15_3_4, relu_15_4_2], name='concat_10')
+        values=[relu_15_1, concat_15_2_3, concat_15_3_4, relu_15_4_2], axis=3, name='concat_10')
+
     # 320*1*1*2048 same stride=1
     conv_16_1 = tf.nn.conv2d(input=concat_10,
                              filters=weights['conv_16_1'],
@@ -1189,8 +1186,8 @@ def Inception_V3(features, labels, mode):
         values=[relu_16_3_3_1, relu_16_3_3_2], axis=3, name='concat_16_3_4')
 
     # filter_size=3 same stride=1
-    average_pool_16_4_1 = tf.nn.avg_pool2d(input=concat_10,
-                                           filter=[1, 3, 3, 1],
+    average_pool_16_4_1 = tf.nn.avg_pool2d(value=concat_10,
+                                           ksize=3,
                                            strides=[1, 1, 1, 1],
                                            padding='SAME',
                                            name='average_pool_16_4_1')
@@ -1207,11 +1204,11 @@ def Inception_V3(features, labels, mode):
 
     # 121
     concat_11 = tf.concat(
-        values=[relu_16_1, concat_16_2_3, concat_16_3_4, relu_16_4_2], name='concat_11')
+        values=[relu_16_1, concat_16_2_3, concat_16_3_4, relu_16_4_2], axis=3, name='concat_11')
 
     # filter_size=8 valid stride=2
-    average_pool_17 = tf.nn.avg_pool2d(input=concat_11,
-                                       filter=[1, 8, 8, 1],
+    average_pool_17 = tf.nn.avg_pool2d(value=concat_11,
+                                       ksize=8,
                                        strides=[1, 2, 2, 1],
                                        padding='VALID',
                                        name='average_pool_17')
@@ -1239,7 +1236,7 @@ def Inception_V3(features, labels, mode):
     loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
 
     if mode == tf.estimator.ModeKeys.TRAIN:
-        optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+        optimizer = tf.train.GradientDescentOptimizer(learning_rate=0)
         train_op = optimizer.minimize(
             loss=loss,
             global_step=tf.train.get_global_step())
@@ -1263,22 +1260,28 @@ def get_data():
 
     with open(DATA_PATH + '/data_batch_1', 'rb') as f:
         train_batches = pickle.load(f, encoding='bytes')
-        train_images.extend(train_batches[b'data'])
-        train_labels.extend(train_batches[b'labels'])
+        train_images.extend(train_batches[b'data'][:20])
+        train_labels.extend(train_batches[b'labels'][:20])
+
+    # temp = [[0 for _ in range(1001)] for _ in range(len(train_labels))]
+
+    # for i in range(len(train_labels)):
+    #     temp[i][train_labels[i]] = 1
 
     def preprocess_images(image):
-        image.resize((32, 32, 3))
+        image.resize(32, 32, 3)
         return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32)
 
     train_images = [preprocess_images(image) for image in train_images]
+    # train_labels = [temp[i] for i in range(len(temp))]
 
     return labels, np.asarray(train_images), np.asarray(train_labels)
 
 
 labels, train_images, train_labels = get_data()
 
-eval_images, eval_labels = train_images[:500], train_labels[:500]
-train_images, train_labels = train_images[500:], train_labels[500:]
+eval_images, eval_labels = train_images[:5], train_labels[:5]
+train_images, train_labels = train_images[5:], train_labels[5:]
 
 classifier = tf.estimator.Estimator(
     model_fn=Inception_V3, model_dir='./model'
@@ -1287,7 +1290,7 @@ classifier = tf.estimator.Estimator(
 train_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={'x': train_images},
     y=train_labels,
-    batch_size=1,
+    batch_size=5,
     num_epochs=None,
     shuffle=False
 )
