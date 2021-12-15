@@ -944,8 +944,8 @@ def Inception_V3(features, labels, mode):
                                padding='VALID',
                                name='conv_14_2_2')
 
-    relu_14_2 = tf.nn.relu(features=conv_14_2_2,
-                           name='relu_14_2')
+    relu_14_2_2 = tf.nn.relu(features=conv_14_2_2,
+                           name='relu_14_2_2')
 
     # 192*1*1*768 same stride=1
     conv_14_3_1 = tf.nn.conv2d(input=concat_8,
