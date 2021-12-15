@@ -4,8 +4,6 @@ import pickle
 import tensorflow as tf
 print(tf.__version__)
 
-from tensorflow.python.ops.numpy_ops import np_config
-np_config.enable_numpy_behavior()
 
 if tf.__version__.startswith('2.'):
     tf = tf.compat.v1
@@ -17,108 +15,107 @@ DATA_PATH = './../data'
 INPUT_CKPT_PATH = './model/model.ckpt-1'
 OUTPUT_PATH = './result'
 
-
 def Inception_V3(features, labels, mode):
     input_layer = tf.reshape(features['x'],
                              [-1, IMAGE_SIZE, IMAGE_SIZE, 3],
                              name='data')
 
     weights = {
-        'conv_1': tf.Variable(tf.random_normal([3, 3, 3, 32])),
-        'conv_2': tf.Variable(tf.random_normal([3, 3, 32, 32])),
-        'conv_3': tf.Variable(tf.random_normal([3, 3, 32, 64])),
-        'conv_4': tf.Variable(tf.random_normal([1, 1, 64, 80])),
-        'conv_5': tf.Variable(tf.random_normal([3, 3, 80, 192])),
-        'conv_6_1': tf.Variable(tf.random_normal([1, 1, 192, 64])),
-        'conv_6_2_1': tf.Variable(tf.random_normal([1, 1, 192, 48])),
-        'conv_6_2_2': tf.Variable(tf.random_normal([5, 5, 48, 64])),
-        'conv_6_3_1': tf.Variable(tf.random_normal([1, 1, 192, 64])),
-        'conv_6_3_2': tf.Variable(tf.random_normal([3, 3, 64, 96])),
-        'conv_6_3_3': tf.Variable(tf.random_normal([3, 3, 96, 96])),
-        'conv_6_4_2': tf.Variable(tf.random_normal([1, 1, 192, 32])),
-        'conv_7_1': tf.Variable(tf.random_normal([1, 1, 256, 64])),
-        'conv_7_2_1': tf.Variable(tf.random_normal([1, 1, 256, 48])),
-        'conv_7_2_2': tf.Variable(tf.random_normal([5, 5, 48, 64])),
-        'conv_7_3_1': tf.Variable(tf.random_normal([1, 1, 256, 64])),
-        'conv_7_3_2': tf.Variable(tf.random_normal([3, 3, 64, 96])),
-        'conv_7_3_3': tf.Variable(tf.random_normal([3, 3, 96, 96])),
-        'conv_7_4_2': tf.Variable(tf.random_normal([1, 1, 256, 64])),
-        'conv_8_1': tf.Variable(tf.random_normal([1, 1, 288, 64])),
-        'conv_8_2_1': tf.Variable(tf.random_normal([1, 1, 288, 48])),
-        'conv_8_2_2': tf.Variable(tf.random_normal([5, 5, 48, 64])),
-        'conv_8_3_1': tf.Variable(tf.random_normal([1, 1, 288, 64])),
-        'conv_8_3_2': tf.Variable(tf.random_normal([3, 3, 64, 96])),
-        'conv_8_3_3': tf.Variable(tf.random_normal([3, 3, 96, 96])),
-        'conv_8_4_2': tf.Variable(tf.random_normal([1, 1, 288, 64])),
-        'conv_9_2': tf.Variable(tf.random_normal([3, 3, 288, 384])),
-        'conv_9_3_1': tf.Variable(tf.random_normal([1, 1, 288, 64])),
-        'conv_9_3_2': tf.Variable(tf.random_normal([3, 3, 64, 96])),
-        'conv_9_3_3': tf.Variable(tf.random_normal([3, 3, 96, 96])),
-        'conv_10_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_10_2_1': tf.Variable(tf.random_normal([1, 1, 768, 128])),
-        'conv_10_2_2': tf.Variable(tf.random_normal([1, 7, 128, 128])),
-        'conv_10_2_3': tf.Variable(tf.random_normal([7, 1, 128, 192])),
-        'conv_10_3_1': tf.Variable(tf.random_normal([1, 1, 768, 128])),
-        'conv_10_3_2': tf.Variable(tf.random_normal([7, 1, 128, 128])),
-        'conv_10_3_3': tf.Variable(tf.random_normal([1, 7, 128, 128])),
-        'conv_10_3_4': tf.Variable(tf.random_normal([7, 1, 128, 128])),
-        'conv_10_3_5': tf.Variable(tf.random_normal([1, 7, 128, 192])),
-        'conv_10_4_2': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_11_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_11_2_1': tf.Variable(tf.random_normal([1, 1, 768, 160])),
-        'conv_11_2_2': tf.Variable(tf.random_normal([1, 7, 160, 160])),
-        'conv_11_2_3': tf.Variable(tf.random_normal([7, 1, 160, 192])),
-        'conv_11_3_1': tf.Variable(tf.random_normal([1, 1, 768, 160])),
-        'conv_11_3_2': tf.Variable(tf.random_normal([7, 1, 160, 160])),
-        'conv_11_3_3': tf.Variable(tf.random_normal([1, 7, 160, 160])),
-        'conv_11_3_4': tf.Variable(tf.random_normal([7, 1, 160, 160])),
-        'conv_11_3_5': tf.Variable(tf.random_normal([1, 7, 160, 192])),
-        'conv_11_4_2': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_12_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_12_2_1': tf.Variable(tf.random_normal([1, 1, 768, 160])),
-        'conv_12_2_2': tf.Variable(tf.random_normal([1, 7, 160, 160])),
-        'conv_12_2_3': tf.Variable(tf.random_normal([7, 1, 160, 192])),
-        'conv_12_3_1': tf.Variable(tf.random_normal([1, 1, 768, 160])),
-        'conv_12_3_2': tf.Variable(tf.random_normal([7, 1, 160, 160])),
-        'conv_12_3_3': tf.Variable(tf.random_normal([1, 7, 160, 160])),
-        'conv_12_3_4': tf.Variable(tf.random_normal([7, 1, 160, 160])),
-        'conv_12_3_5': tf.Variable(tf.random_normal([1, 7, 160, 192])),
-        'conv_12_4_2': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_13_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_13_2_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_13_2_2': tf.Variable(tf.random_normal([1, 7, 192, 192])),
-        'conv_13_2_3': tf.Variable(tf.random_normal([7, 1, 192, 192])),
-        'conv_13_3_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_13_3_2': tf.Variable(tf.random_normal([7, 1, 192, 192])),
-        'conv_13_3_3': tf.Variable(tf.random_normal([1, 7, 192, 192])),
-        'conv_13_3_4': tf.Variable(tf.random_normal([7, 1, 192, 192])),
-        'conv_13_3_5': tf.Variable(tf.random_normal([1, 7, 192, 192])),
-        'conv_13_4_2': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_14_2_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_14_2_2': tf.Variable(tf.random_normal([3, 3, 192, 320])),
-        'conv_14_3_1': tf.Variable(tf.random_normal([1, 1, 768, 192])),
-        'conv_14_3_2': tf.Variable(tf.random_normal([1, 7, 192, 192])),
-        'conv_14_3_3': tf.Variable(tf.random_normal([7, 1, 192, 192])),
-        'conv_14_3_4': tf.Variable(tf.random_normal([3, 3, 192, 192])),
-        'conv_15_1': tf.Variable(tf.random_normal([1, 1, 1280, 320])),
-        'conv_15_2_1': tf.Variable(tf.random_normal([1, 1, 1280, 384])),
-        'conv_15_2_2_1': tf.Variable(tf.random_normal([1, 3, 384, 384])),
-        'conv_15_2_2_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
-        'conv_15_3_1': tf.Variable(tf.random_normal([1, 1, 1280, 448])),
-        'conv_15_3_2': tf.Variable(tf.random_normal([3, 3, 448, 384])),
-        'conv_15_3_3_1': tf.Variable(tf.random_normal([1, 3, 384, 384])),
-        'conv_15_3_3_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
-        'conv_15_4_2': tf.Variable(tf.random_normal([1, 1, 1280, 192])),
-        'conv_16_1': tf.Variable(tf.random_normal([1, 1, 2048, 320])),
-        'conv_16_2_1': tf.Variable(tf.random_normal([1, 1, 2048, 384])),
-        'conv_16_2_2_1': tf.Variable(tf.random_normal([1, 3, 384, 384])),
-        'conv_16_2_2_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
-        'conv_16_3_1': tf.Variable(tf.random_normal([1, 1, 2048, 448])),
-        'conv_16_3_2': tf.Variable(tf.random_normal([3, 3, 448, 384])),
-        'conv_16_3_3_1': tf.Variable(tf.random_normal([1, 3, 384, 384])),
-        'conv_16_3_3_2': tf.Variable(tf.random_normal([3, 1, 384, 384])),
-        'conv_16_4_2': tf.Variable(tf.random_normal([1, 1, 2048, 192])),
-        'conv_17': tf.Variable(tf.random_normal([1, 1, 2048, 1001]))
+        'conv_1': tf.Variable(tf.truncated_normal([3, 3, 3, 32], mean=0, stddev=1e-2)),
+        'conv_2': tf.Variable(tf.truncated_normal([3, 3, 32, 32], mean=0, stddev=1e-2)),
+        'conv_3': tf.Variable(tf.truncated_normal([3, 3, 32, 64], mean=0, stddev=1e-2)),
+        'conv_4': tf.Variable(tf.truncated_normal([1, 1, 64, 80], mean=0, stddev=1e-2)),
+        'conv_5': tf.Variable(tf.truncated_normal([3, 3, 80, 192], mean=0, stddev=1e-2)),
+        'conv_6_1': tf.Variable(tf.truncated_normal([1, 1, 192, 64], mean=0, stddev=1e-2)),
+        'conv_6_2_1': tf.Variable(tf.truncated_normal([1, 1, 192, 48], mean=0, stddev=1e-2)),
+        'conv_6_2_2': tf.Variable(tf.truncated_normal([5, 5, 48, 64], mean=0, stddev=1e-2)),
+        'conv_6_3_1': tf.Variable(tf.truncated_normal([1, 1, 192, 64], mean=0, stddev=1e-2)),
+        'conv_6_3_2': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
+        'conv_6_3_3': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
+        'conv_6_4_2': tf.Variable(tf.truncated_normal([1, 1, 192, 32], mean=0, stddev=1e-2)),
+        'conv_7_1': tf.Variable(tf.truncated_normal([1, 1, 256, 64], mean=0, stddev=1e-2)),
+        'conv_7_2_1': tf.Variable(tf.truncated_normal([1, 1, 256, 48], mean=0, stddev=1e-2)),
+        'conv_7_2_2': tf.Variable(tf.truncated_normal([5, 5, 48, 64], mean=0, stddev=1e-2)),
+        'conv_7_3_1': tf.Variable(tf.truncated_normal([1, 1, 256, 64], mean=0, stddev=1e-2)),
+        'conv_7_3_2': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
+        'conv_7_3_3': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
+        'conv_7_4_2': tf.Variable(tf.truncated_normal([1, 1, 256, 64], mean=0, stddev=1e-2)),
+        'conv_8_1': tf.Variable(tf.truncated_normal([1, 1, 288, 64], mean=0, stddev=1e-2)),
+        'conv_8_2_1': tf.Variable(tf.truncated_normal([1, 1, 288, 48], mean=0, stddev=1e-2)),
+        'conv_8_2_2': tf.Variable(tf.truncated_normal([5, 5, 48, 64], mean=0, stddev=1e-2)),
+        'conv_8_3_1': tf.Variable(tf.truncated_normal([1, 1, 288, 64], mean=0, stddev=1e-2)),
+        'conv_8_3_2': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
+        'conv_8_3_3': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
+        'conv_8_4_2': tf.Variable(tf.truncated_normal([1, 1, 288, 64], mean=0, stddev=1e-2)),
+        'conv_9_2': tf.Variable(tf.truncated_normal([3, 3, 288, 384], mean=0, stddev=1e-2)),
+        'conv_9_3_1': tf.Variable(tf.truncated_normal([1, 1, 288, 64], mean=0, stddev=1e-2)),
+        'conv_9_3_2': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
+        'conv_9_3_3': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
+        'conv_10_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_10_2_1': tf.Variable(tf.truncated_normal([1, 1, 768, 128], mean=0, stddev=1e-2)),
+        'conv_10_2_2': tf.Variable(tf.truncated_normal([1, 7, 128, 128], mean=0, stddev=1e-2)),
+        'conv_10_2_3': tf.Variable(tf.truncated_normal([7, 1, 128, 192], mean=0, stddev=1e-2)),
+        'conv_10_3_1': tf.Variable(tf.truncated_normal([1, 1, 768, 128], mean=0, stddev=1e-2)),
+        'conv_10_3_2': tf.Variable(tf.truncated_normal([7, 1, 128, 128], mean=0, stddev=1e-2)),
+        'conv_10_3_3': tf.Variable(tf.truncated_normal([1, 7, 128, 128], mean=0, stddev=1e-2)),
+        'conv_10_3_4': tf.Variable(tf.truncated_normal([7, 1, 128, 128], mean=0, stddev=1e-2)),
+        'conv_10_3_5': tf.Variable(tf.truncated_normal([1, 7, 128, 192], mean=0, stddev=1e-2)),
+        'conv_10_4_2': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_11_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_11_2_1': tf.Variable(tf.truncated_normal([1, 1, 768, 160], mean=0, stddev=1e-2)),
+        'conv_11_2_2': tf.Variable(tf.truncated_normal([1, 7, 160, 160], mean=0, stddev=1e-2)),
+        'conv_11_2_3': tf.Variable(tf.truncated_normal([7, 1, 160, 192], mean=0, stddev=1e-2)),
+        'conv_11_3_1': tf.Variable(tf.truncated_normal([1, 1, 768, 160], mean=0, stddev=1e-2)),
+        'conv_11_3_2': tf.Variable(tf.truncated_normal([7, 1, 160, 160], mean=0, stddev=1e-2)),
+        'conv_11_3_3': tf.Variable(tf.truncated_normal([1, 7, 160, 160], mean=0, stddev=1e-2)),
+        'conv_11_3_4': tf.Variable(tf.truncated_normal([7, 1, 160, 160], mean=0, stddev=1e-2)),
+        'conv_11_3_5': tf.Variable(tf.truncated_normal([1, 7, 160, 192], mean=0, stddev=1e-2)),
+        'conv_11_4_2': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_12_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_12_2_1': tf.Variable(tf.truncated_normal([1, 1, 768, 160], mean=0, stddev=1e-2)),
+        'conv_12_2_2': tf.Variable(tf.truncated_normal([1, 7, 160, 160], mean=0, stddev=1e-2)),
+        'conv_12_2_3': tf.Variable(tf.truncated_normal([7, 1, 160, 192], mean=0, stddev=1e-2)),
+        'conv_12_3_1': tf.Variable(tf.truncated_normal([1, 1, 768, 160], mean=0, stddev=1e-2)),
+        'conv_12_3_2': tf.Variable(tf.truncated_normal([7, 1, 160, 160], mean=0, stddev=1e-2)),
+        'conv_12_3_3': tf.Variable(tf.truncated_normal([1, 7, 160, 160], mean=0, stddev=1e-2)),
+        'conv_12_3_4': tf.Variable(tf.truncated_normal([7, 1, 160, 160], mean=0, stddev=1e-2)),
+        'conv_12_3_5': tf.Variable(tf.truncated_normal([1, 7, 160, 192], mean=0, stddev=1e-2)),
+        'conv_12_4_2': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_13_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_13_2_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_13_2_2': tf.Variable(tf.truncated_normal([1, 7, 192, 192], mean=0, stddev=1e-2)),
+        'conv_13_2_3': tf.Variable(tf.truncated_normal([7, 1, 192, 192], mean=0, stddev=1e-2)),
+        'conv_13_3_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_13_3_2': tf.Variable(tf.truncated_normal([7, 1, 192, 192], mean=0, stddev=1e-2)),
+        'conv_13_3_3': tf.Variable(tf.truncated_normal([1, 7, 192, 192], mean=0, stddev=1e-2)),
+        'conv_13_3_4': tf.Variable(tf.truncated_normal([7, 1, 192, 192], mean=0, stddev=1e-2)),
+        'conv_13_3_5': tf.Variable(tf.truncated_normal([1, 7, 192, 192], mean=0, stddev=1e-2)),
+        'conv_13_4_2': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_14_2_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_14_2_2': tf.Variable(tf.truncated_normal([3, 3, 192, 320], mean=0, stddev=1e-2)),
+        'conv_14_3_1': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
+        'conv_14_3_2': tf.Variable(tf.truncated_normal([1, 7, 192, 192], mean=0, stddev=1e-2)),
+        'conv_14_3_3': tf.Variable(tf.truncated_normal([7, 1, 192, 192], mean=0, stddev=1e-2)),
+        'conv_14_3_4': tf.Variable(tf.truncated_normal([3, 3, 192, 192], mean=0, stddev=1e-2)),
+        'conv_15_1': tf.Variable(tf.truncated_normal([1, 1, 1280, 320], mean=0, stddev=1e-2)),
+        'conv_15_2_1': tf.Variable(tf.truncated_normal([1, 1, 1280, 384], mean=0, stddev=1e-2)),
+        'conv_15_2_2_1': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
+        'conv_15_2_2_2': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
+        'conv_15_3_1': tf.Variable(tf.truncated_normal([1, 1, 1280, 448], mean=0, stddev=1e-2)),
+        'conv_15_3_2': tf.Variable(tf.truncated_normal([3, 3, 448, 384], mean=0, stddev=1e-2)),
+        'conv_15_3_3_1': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
+        'conv_15_3_3_2': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
+        'conv_15_4_2': tf.Variable(tf.truncated_normal([1, 1, 1280, 192], mean=0, stddev=1e-2)),
+        'conv_16_1': tf.Variable(tf.truncated_normal([1, 1, 2048, 320], mean=0, stddev=1e-2)),
+        'conv_16_2_1': tf.Variable(tf.truncated_normal([1, 1, 2048, 384], mean=0, stddev=1e-2)),
+        'conv_16_2_2_1': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
+        'conv_16_2_2_2': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
+        'conv_16_3_1': tf.Variable(tf.truncated_normal([1, 1, 2048, 448], mean=0, stddev=1e-2)),
+        'conv_16_3_2': tf.Variable(tf.truncated_normal([3, 3, 448, 384], mean=0, stddev=1e-2)),
+        'conv_16_3_3_1': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
+        'conv_16_3_3_2': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
+        'conv_16_4_2': tf.Variable(tf.truncated_normal([1, 1, 2048, 192], mean=0, stddev=1e-2)),
+        'conv_17': tf.Variable(tf.truncated_normal([1, 1, 2048, 1001], mean=0, stddev=1e-2))
     }
 
     # 32*3*3*3 valid stride=2
@@ -699,7 +696,7 @@ def Inception_V3(features, labels, mode):
 
     # 63
     concat_6 = tf.concat(
-        values=[relu_11_1, relu_11_2_3, relu_11_3_5, relu_11_4_2], axis=3, name='concat_5')
+        values=[relu_11_1, relu_11_2_3, relu_11_3_5, relu_11_4_2], axis=3, name='concat_6')
 
     # 192*1*1*768 same stride=1
     conv_12_1 = tf.nn.conv2d(input=concat_6,
@@ -1263,17 +1260,11 @@ def get_data():
         train_images.extend(train_batches[b'data'][:20])
         train_labels.extend(train_batches[b'labels'][:20])
 
-    # temp = [[0 for _ in range(1001)] for _ in range(len(train_labels))]
-
-    # for i in range(len(train_labels)):
-    #     temp[i][train_labels[i]] = 1
-
     def preprocess_images(image):
         image.resize(32, 32, 3)
-        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32)
+        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32) / 255.0
 
     train_images = [preprocess_images(image) for image in train_images]
-    # train_labels = [temp[i] for i in range(len(temp))]
 
     return labels, np.asarray(train_images), np.asarray(train_labels)
 
@@ -1290,15 +1281,14 @@ classifier = tf.estimator.Estimator(
 train_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={'x': train_images},
     y=train_labels,
-    batch_size=5,
-    num_epochs=None,
+    batch_size=1,
+    num_epochs=1,
     shuffle=False
 )
+with tf.Graph().as_default():
+    classifier.train(input_fn=train_input_fn, steps=1)
 
-classifier.train(
-    input_fn=train_input_fn,
-    steps=1
-)
+print('train done', flush=True)
 
 eval_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={'x': eval_images},
@@ -1316,7 +1306,7 @@ input_graph_def = graph.as_graph_def()
 
 with tf.Session() as sess:
     saver.restore(sess, INPUT_CKPT_PATH)
-    output_graph_def = tf.graph_util.conv_ert_variables_to_constants(
+    output_graph_def = tf.graph_util.convert_variables_to_constants(
         sess=sess,
         input_graph_def=input_graph_def,
         output_node_names=['reshape']

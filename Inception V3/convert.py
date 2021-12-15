@@ -11,7 +11,7 @@ OUTPUT_PB_PATH = OUTPUT_PATH + '/frozen.pb'
 
 def convert_to_tflite():
     convert = tf.lite.TFLiteConverter.from_frozen_graph(
-        OUTPUT_PB_PATH, input_arrays=['data'], output_arrays=['softmax'])
+        OUTPUT_PB_PATH, input_arrays=['data'], output_arrays=['reshape'])
     convert.post_training_quantize = False
     tflite_model = convert.convert()
 
@@ -20,7 +20,7 @@ def convert_to_tflite():
 
 def convert_to_quant_tflite():
     convert = tf.lite.TFLiteConverter.from_frozen_graph(
-        OUTPUT_PB_PATH, input_arrays=['data'], output_arrays=['softmax'])
+        OUTPUT_PB_PATH, input_arrays=['data'], output_arrays=['reshape'])
     convert.inference_type = tf.uint8
     convert.inference_input_type = tf.uint8  # or tf.uint8
     convert.default_ranges_stats = (0,1)
@@ -33,5 +33,5 @@ def convert_to_quant_tflite():
         f.write(tflite_model)
 
 if __name__ == '__main__':
-    convert_to_tflite()
-    # convert_to_quant_tflite()
+    # convert_to_tflite()
+    convert_to_quant_tflite()
