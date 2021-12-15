@@ -2,8 +2,10 @@ AlexNet/one_branch/model/
 AlexNet/one_branch/result/
 AlexNet/two_branch/model/
 AlexNet/two_branch/result/
-Inception V3/model/
-Inception V3/result/
+Inception V3/one_branch/model/
+Inception V3/one_branch/result/
+Inception V3/two_branch/model/
+Inception V3/two_branch/result/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

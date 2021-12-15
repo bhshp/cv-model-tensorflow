@@ -11,7 +11,7 @@ if tf.__version__.startswith('2.'):
 tf.disable_eager_execution()
 
 IMAGE_SIZE = 299
-DATA_PATH = './../data'
+DATA_PATH = './../../data'
 INPUT_CKPT_PATH = './model/model.ckpt-1'
 OUTPUT_PATH = './result'
 
