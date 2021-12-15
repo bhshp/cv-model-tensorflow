@@ -989,7 +989,7 @@ def Inception_V3(features, labels, mode):
 
     # 95
     concat_9 = tf.concat(
-        values=[max_pooling_14_1, relu_14_2, relu_14_3_4], axis=3, name='concat_8')
+        values=[max_pooling_14_1, relu_14_2_2, relu_14_3_4], axis=3, name='concat_8')
 
     # 320*1*1*1280 same stride=1
     conv_15_1 = tf.nn.conv2d(input=concat_9,
