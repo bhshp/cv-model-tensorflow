@@ -117,45 +117,20 @@ def Inception_V3(features, labels, mode):
         'conv_16_3_3_2': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
         'conv_16_4_2': tf.Variable(tf.truncated_normal([1, 1, 2048, 192], mean=0, stddev=1e-2)),
         'conv_17': tf.Variable(tf.truncated_normal([1, 1, 2048, 1001], mean=0, stddev=1e-2)),
-        'conv_1_copy': tf.Variable(tf.truncated_normal([3, 3, 3, 32], mean=0, stddev=1e-2)),
-        'conv_2_copy': tf.Variable(tf.truncated_normal([3, 3, 32, 32], mean=0, stddev=1e-2)),
-        'conv_3_copy': tf.Variable(tf.truncated_normal([3, 3, 32, 64], mean=0, stddev=1e-2)),
-        'conv_4_copy': tf.Variable(tf.truncated_normal([1, 1, 64, 80], mean=0, stddev=1e-2)),
-        'conv_5_copy': tf.Variable(tf.truncated_normal([3, 3, 80, 192], mean=0, stddev=1e-2)),
-        'conv_6_1_copy': tf.Variable(tf.truncated_normal([1, 1, 192, 64], mean=0, stddev=1e-2)),
-        'conv_6_2_1_copy': tf.Variable(tf.truncated_normal([1, 1, 192, 48], mean=0, stddev=1e-2)),
-        'conv_6_2_2_copy': tf.Variable(tf.truncated_normal([5, 5, 48, 64], mean=0, stddev=1e-2)),
-        'conv_6_3_1_copy': tf.Variable(tf.truncated_normal([1, 1, 192, 64], mean=0, stddev=1e-2)),
-        'conv_6_3_2_copy': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
-        'conv_6_3_3_copy': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
-        'conv_6_4_2_copy': tf.Variable(tf.truncated_normal([1, 1, 192, 32], mean=0, stddev=1e-2)),
-        'conv_7_1_copy': tf.Variable(tf.truncated_normal([1, 1, 256, 64], mean=0, stddev=1e-2)),
-        'conv_7_2_1_copy': tf.Variable(tf.truncated_normal([1, 1, 256, 48], mean=0, stddev=1e-2)),
-        'conv_7_2_2_copy': tf.Variable(tf.truncated_normal([5, 5, 48, 64], mean=0, stddev=1e-2)),
-        'conv_7_3_1_copy': tf.Variable(tf.truncated_normal([1, 1, 256, 64], mean=0, stddev=1e-2)),
-        'conv_7_3_2_copy': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
-        'conv_7_3_3_copy': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
-        'conv_7_4_2_copy': tf.Variable(tf.truncated_normal([1, 1, 256, 64], mean=0, stddev=1e-2)),
-        'conv_9_2_copy': tf.Variable(tf.truncated_normal([3, 3, 288, 384], mean=0, stddev=1e-2)),
-        'conv_9_3_1_copy': tf.Variable(tf.truncated_normal([1, 1, 288, 64], mean=0, stddev=1e-2)),
-        'conv_9_3_2_copy': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
-        'conv_9_3_3_copy': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
-        'conv_14_2_1_copy': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
-        'conv_14_2_2_copy': tf.Variable(tf.truncated_normal([3, 3, 192, 320], mean=0, stddev=1e-2)),
-        'conv_14_3_1_copy': tf.Variable(tf.truncated_normal([1, 1, 768, 192], mean=0, stddev=1e-2)),
-        'conv_14_3_2_copy': tf.Variable(tf.truncated_normal([1, 7, 192, 192], mean=0, stddev=1e-2)),
-        'conv_14_3_3_copy': tf.Variable(tf.truncated_normal([7, 1, 192, 192], mean=0, stddev=1e-2)),
-        'conv_14_3_4_copy': tf.Variable(tf.truncated_normal([3, 3, 192, 192], mean=0, stddev=1e-2)),
-        'conv_15_1_copy': tf.Variable(tf.truncated_normal([1, 1, 1280, 320], mean=0, stddev=1e-2)),
-        'conv_15_2_1_copy': tf.Variable(tf.truncated_normal([1, 1, 1280, 384], mean=0, stddev=1e-2)),
-        'conv_15_2_2_1_copy': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
-        'conv_15_2_2_2_copy': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
-        'conv_15_3_1_copy': tf.Variable(tf.truncated_normal([1, 1, 1280, 448], mean=0, stddev=1e-2)),
-        'conv_15_3_2_copy': tf.Variable(tf.truncated_normal([3, 3, 448, 384], mean=0, stddev=1e-2)),
-        'conv_15_3_3_1_copy': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
-        'conv_15_3_3_2_copy': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
-        'conv_15_4_2_copy': tf.Variable(tf.truncated_normal([1, 1, 1280, 192], mean=0, stddev=1e-2)),
-        'conv_17_copy': tf.Variable(tf.truncated_normal([1, 1, 2048, 1001], mean=0, stddev=1e-2)),
+        'conv_1_gpu': tf.Variable(tf.truncated_normal([3, 3, 3, 32], mean=0, stddev=1e-2)),
+        'conv_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 32, 32], mean=0, stddev=1e-2)),
+        'conv_3_gpu': tf.Variable(tf.truncated_normal([3, 3, 32, 64], mean=0, stddev=1e-2)),
+        'conv_4_gpu': tf.Variable(tf.truncated_normal([1, 1, 64, 80], mean=0, stddev=1e-2)),
+        'conv_5_gpu': tf.Variable(tf.truncated_normal([3, 3, 80, 192], mean=0, stddev=1e-2)),
+        'conv_9_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 192, 384], mean=0, stddev=1e-2)),
+        'conv_9_3_1_gpu': tf.Variable(tf.truncated_normal([1, 1, 192, 64], mean=0, stddev=1e-2)),
+        'conv_9_3_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
+        'conv_9_3_3_gpu': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
+        'conv_14_2_1_gpu': tf.Variable(tf.truncated_normal([1, 1, 672, 192], mean=0, stddev=1e-2)),
+        'conv_14_2_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 192, 320], mean=0, stddev=1e-2)),
+        'conv_14_3_1_gpu': tf.Variable(tf.truncated_normal([1, 1, 672, 192], mean=0, stddev=1e-2)),
+        'conv_14_3_4_gpu': tf.Variable(tf.truncated_normal([3, 3, 192, 192], mean=0, stddev=1e-2)),
+        'conv_17_gpu': tf.Variable(tf.truncated_normal([1, 1, 1184, 1001], mean=0, stddev=1e-2)),
     }
 
     # 32*3*3*3 valid stride=2
@@ -1263,493 +1238,224 @@ def Inception_V3(features, labels, mode):
 
     logits = reshape
 
-    conv_1_copy = tf.nn.conv2d(input=input_layer,
-                               filters=weights['conv_1_copy'],
+    # =========================================================================
+
+    conv_1_gpu = tf.nn.conv2d(input=input_layer,
+                               filters=weights['conv_1_gpu'],
                                strides=[1, 2, 2, 1],
                                padding='VALID',
-                               name='conv_1_copy')
+                               name='conv_1_gpu')
 
-    relu_1_copy = tf.nn.relu(features=conv_1_copy,
-                             name='relu_1_copy')
+    relu_1_gpu = tf.nn.relu(features=conv_1_gpu,
+                             name='relu_1_gpu')
 
     # 32*3*3*32 valid stride=1
-    conv_2_copy = tf.nn.conv2d(input=relu_1_copy,
-                               filters=weights['conv_2_copy'],
+    conv_2_gpu = tf.nn.conv2d(input=relu_1_gpu,
+                               filters=weights['conv_2_gpu'],
                                strides=[1, 1, 1, 1],
                                padding='VALID',
-                               name='conv_2_copy')
+                               name='conv_2_gpu')
 
-    relu_2_copy = tf.nn.relu(features=conv_2_copy,
-                             name='relu_2_copy')
+    relu_2_gpu = tf.nn.relu(features=conv_2_gpu,
+                             name='relu_2_gpu')
 
     # 64*3*3*32 same stride=1
-    conv_3_copy = tf.nn.conv2d(input=relu_2_copy,
-                               filters=weights['conv_3_copy'],
+    conv_3_gpu = tf.nn.conv2d(input=relu_2_gpu,
+                               filters=weights['conv_3_gpu'],
                                strides=[1, 1, 1, 1],
                                padding='SAME',
-                               name='conv_3_copy')
+                               name='conv_3_gpu')
 
-    relu_3_copy = tf.nn.relu(features=conv_3_copy,
-                             name='relu_3_copy')
+    relu_3_gpu = tf.nn.relu(features=conv_3_gpu,
+                             name='relu_3_gpu')
 
     # filter_size=3 valid stride=2
-    max_pooling_1_copy = tf.nn.max_pool2d(input=relu_3_copy,
+    max_pooling_1_gpu = tf.nn.max_pool2d(input=relu_3_gpu,
                                           ksize=3,
                                           strides=2,
                                           padding='VALID',
-                                          name='max_pooling_1_copy')
+                                          name='max_pooling_1_gpu')
 
     # 80*1*1*64 valid stride=1
-    conv_4_copy = tf.nn.conv2d(input=max_pooling_1_copy,
-                               filters=weights['conv_4_copy'],
+    conv_4_gpu = tf.nn.conv2d(input=max_pooling_1_gpu,
+                               filters=weights['conv_4_gpu'],
                                strides=[1, 1, 1, 1],
                                padding='VALID',
-                               name='conv_4_copy')
+                               name='conv_4_gpu')
 
-    relu_4_copy = tf.nn.relu(features=conv_4_copy,
-                             name='relu_4_copy')
+    relu_4_gpu = tf.nn.relu(features=conv_4_gpu,
+                             name='relu_4_gpu')
 
     # 192*3*3*80 valid stride=1
-    conv_5_copy = tf.nn.conv2d(input=relu_4_copy,
-                               filters=weights['conv_5_copy'],
+    conv_5_gpu = tf.nn.conv2d(input=relu_4_gpu,
+                               filters=weights['conv_5_gpu'],
                                strides=[1, 1, 1, 1],
                                padding='VALID',
-                               name='conv_5_copy')
+                               name='conv_5_gpu')
 
-    relu_5_copy = tf.nn.relu(features=conv_5_copy,
-                             name='relu_5_copy')
+    relu_5_gpu = tf.nn.relu(features=conv_5_gpu,
+                             name='relu_5_gpu')
 
     # filter_size=3 valid stride=2
-    max_pooling_2_copy = tf.nn.max_pool2d(input=relu_5_copy,
+    max_pooling_2_gpu = tf.nn.max_pool2d(input=relu_5_gpu,
                                           ksize=3,
                                           strides=2,
                                           padding='VALID',
-                                          name='max_pooling_2_copy')
+                                          name='max_pooling_2_gpu')
 
-    # 64*1*1*192 same stride=1
-    conv_6_1_copy = tf.nn.conv2d(input=max_pooling_2_copy,
-                                 filters=weights['conv_6_1_copy'],
-                                 strides=[1, 1, 1, 1],
-                                 padding='SAME',
-                                 name='conv_6_1_copy')
+    print('max_pooling_2_gpu.shape =', max_pooling_2_gpu.shape)
 
-    relu_6_1_copy = tf.nn.relu(features=conv_6_1_copy,
-                               name='relu_6_1_copy')
+    concat_2_gpu = max_pooling_2_gpu
 
-    # 48*1*1*192 same stride=1
-    conv_6_2_1_copy = tf.nn.conv2d(input=max_pooling_2_copy,
-                                   filters=weights['conv_6_2_1_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_6_2_1_copy')
-
-    relu_6_2_1_copy = tf.nn.relu(features=conv_6_2_1_copy,
-                                 name='relu_6_2_1_copy')
-
-    # 64*5*5*48 same stride=1
-    conv_6_2_2_copy = tf.nn.conv2d(input=relu_6_2_1_copy,
-                                   filters=weights['conv_6_2_2_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_6_2_2_copy')
-
-    relu_6_2_2_copy = tf.nn.relu(features=conv_6_2_2_copy,
-                                 name='relu_6_2_2_copy')
-
-    # 64*1*1*192 same stride=1
-    conv_6_3_1_copy = tf.nn.conv2d(input=max_pooling_2_copy,
-                                   filters=weights['conv_6_3_1_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_6_3_1_copy')
-
-    relu_6_3_1_copy = tf.nn.relu(features=conv_6_3_1_copy,
-                                 name='relu_6_3_1_copy')
-
-    # 96*3*3*64 same stride=1
-    conv_6_3_2_copy = tf.nn.conv2d(input=relu_6_3_1_copy,
-                                   filters=weights['conv_6_3_2_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_6_3_2_copy')
-
-    relu_6_3_2_copy = tf.nn.relu(features=conv_6_3_2_copy,
-                                 name='relu_6_3_2_copy')
-
-    # 96*3*3*96 same stride=1
-    conv_6_3_3_copy = tf.nn.conv2d(input=relu_6_3_2_copy,
-                                   filters=weights['conv_6_3_3_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_6_3_3_copy')
-
-    relu_6_3_3_copy = tf.nn.relu(features=conv_6_3_3_copy,
-                                 name='relu_6_3_3_copy')
-
-    # filter_size=3 same stride=1
-    average_pool_6_4_1_copy = tf.nn.avg_pool2d(value=max_pooling_2_copy,
-                                               ksize=3,
-                                               strides=1,
-                                               padding='SAME',
-                                               name='average_pool_6_4_1_copy')
-
-    # 32*1*1*192 same stride=1
-    conv_6_4_2_copy = tf.nn.conv2d(input=average_pool_6_4_1_copy,
-                                   filters=weights['conv_6_4_2_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_6_4_2_copy')
-
-    relu_6_4_2_copy = tf.nn.relu(features=conv_6_4_2_copy,
-                                 name='relu_6_4_2_copy')
-
-    # 15
-    concat_1_copy = tf.concat(
-        values=[relu_6_1_copy, relu_6_2_2_copy, relu_6_3_3_copy, relu_6_4_2_copy], axis=3, name='concat_1_copy')
-
-    # 64*1*1*256 same stride=1
-    conv_7_1_copy = tf.nn.conv2d(input=concat_1_copy,
-                                 filters=weights['conv_7_1_copy'],
-                                 strides=[1, 1, 1, 1],
-                                 padding='SAME',
-                                 name='conv_7_1_copy')
-
-    relu_7_1_copy = tf.nn.relu(features=conv_7_1_copy,
-                               name='relu_7_1_copy')
-
-    # 48*1*1*256 same stride=1
-    conv_7_2_1_copy = tf.nn.conv2d(input=concat_1_copy,
-                                   filters=weights['conv_7_2_1_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_7_2_1_copy')
-
-    relu_7_2_1_copy = tf.nn.relu(features=conv_7_2_1_copy,
-                                 name='relu_7_2_1_copy')
-
-    # 64*5*5*48 same stride=1
-    conv_7_2_2_copy = tf.nn.conv2d(input=relu_7_2_1_copy,
-                                   filters=weights['conv_7_2_2_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_7_2_2_copy')
-
-    relu_7_2_2_copy = tf.nn.relu(features=conv_7_2_2_copy,
-                                 name='relu_7_2_2_copy')
-
-    # 64*1*1*256 same stride=1
-    conv_7_3_1_copy = tf.nn.conv2d(input=concat_1_copy,
-                                   filters=weights['conv_7_3_1_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_7_3_1_copy')
-
-    relu_7_3_1_copy = tf.nn.relu(features=conv_7_3_1_copy,
-                                 name='relu_7_3_1_copy')
-
-    # 96*3*3*64 same stride=1
-    conv_7_3_2_copy = tf.nn.conv2d(input=relu_7_3_1_copy,
-                                   filters=weights['conv_7_3_2_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_7_3_2_copy')
-
-    relu_7_3_2_copy = tf.nn.relu(features=conv_7_3_2_copy,
-                                 name='relu_7_3_2_copy')
-
-    # 96*3*3*96 same stride=1
-    conv_7_3_3_copy = tf.nn.conv2d(input=relu_7_3_2_copy,
-                                   filters=weights['conv_7_3_3_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_7_3_3_copy')
-
-    relu_7_3_3_copy = tf.nn.relu(features=conv_7_3_3_copy,
-                                 name='relu_7_3_3_copy')
-
-    # filter_size=3 same stride=1
-    average_pool_7_4_1_copy = tf.nn.avg_pool2d(value=concat_1_copy,
-                                               ksize=3,
-                                               strides=1,
-                                               padding='SAME',
-                                               name='average_pool_7_4_1_copy')
-
-    # 64*1*1*256 same stride=1
-    conv_7_4_2_copy = tf.nn.conv2d(input=average_pool_7_4_1_copy,
-                                   filters=weights['conv_7_4_2_copy'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_7_4_2_copy')
-
-    relu_7_4_2_copy = tf.nn.relu(features=conv_7_4_2_copy,
-                                 name='relu_7_4_2_copy')
-
-    # 24
-    concat_2_copy = tf.concat(
-        values=[relu_7_1_copy, relu_7_2_2_copy, relu_7_3_3_copy, relu_7_4_2_copy], axis=3, name='concat_2_copy')
-
-    # 33
     # filter_size=3 valid stride=2
-    max_pooling_9_1_copy = tf.nn.max_pool2d(input=concat_2_copy,
+    max_pooling_9_1_gpu = tf.nn.max_pool2d(input=concat_2_gpu,
                                             ksize=[1, 3, 3, 1],
                                             strides=[1, 2, 2, 1],
                                             padding='VALID',
-                                            name='max_pooling_9_1_copy')
+                                            name='max_pooling_9_1_gpu')
 
-    # 384*3*3*288 valid stride=2
-    conv_9_2_copy = tf.nn.conv2d(input=concat_2_copy,
-                                 filters=weights['conv_9_2_copy'],
+    print('max_pooling_9_1_gpu.shape =', max_pooling_9_1_gpu.shape)
+
+    # 384*3*3*192 valid stride=2
+    conv_9_2_gpu = tf.nn.conv2d(input=concat_2_gpu,
+                                 filters=weights['conv_9_2_gpu'],
                                  strides=[1, 2, 2, 1],
                                  padding='VALID',
-                                 name='conv_9_2_copy')
+                                 name='conv_9_2_gpu')
 
-    relu_9_2_copy = tf.nn.relu(features=conv_9_2_copy,
-                               name='relu_9_2_copy')
+    print('conv_9_2_gpu.shape =', conv_9_2_gpu.shape)
+
+    relu_9_2_gpu = tf.nn.relu(features=conv_9_2_gpu,
+                               name='relu_9_2_gpu')
 
     # 64*1*1*288 same stride=1
-    conv_9_3_1_copy = tf.nn.conv2d(input=concat_2_copy,
-                                   filters=weights['conv_9_3_1_copy'],
+    conv_9_3_1_gpu = tf.nn.conv2d(input=concat_2_gpu,
+                                   filters=weights['conv_9_3_1_gpu'],
                                    strides=[1, 1, 1, 1],
                                    padding='SAME',
-                                   name='conv_9_3_1_copy')
+                                   name='conv_9_3_1_gpu')
 
-    relu_9_3_1_copy = tf.nn.relu(features=conv_9_3_1_copy,
-                                 name='relu_9_3_1_copy')
+    print('conv_9_3_1_gpu.shape =', conv_9_3_1_gpu.shape)
+
+    relu_9_3_1_gpu = tf.nn.relu(features=conv_9_3_1_gpu,
+                                 name='relu_9_3_1_gpu')
 
     # 96*3*3*64 same stride=1
-    conv_9_3_2_copy = tf.nn.conv2d(input=relu_9_3_1_copy,
-                                   filters=weights['conv_9_3_2_copy'],
+    conv_9_3_2_gpu = tf.nn.conv2d(input=relu_9_3_1_gpu,
+                                   filters=weights['conv_9_3_2_gpu'],
                                    strides=[1, 1, 1, 1],
                                    padding='SAME',
-                                   name='conv_9_3_2_copy')
+                                   name='conv_9_3_2_gpu')
 
-    relu_9_3_2_copy = tf.nn.relu(features=conv_9_3_2_copy,
-                                 name='relu_9_3_2_copy')
+    print('conv_9_3_2_gpu.shape =', conv_9_3_2_gpu.shape)
+
+    relu_9_3_2_gpu = tf.nn.relu(features=conv_9_3_2_gpu,
+                                 name='relu_9_3_2_gpu')
 
     # 96*3*3*96 valid stride=2
-    conv_9_3_3_copy = tf.nn.conv2d(input=relu_9_3_2_copy,
-                                   filters=weights['conv_9_3_3_copy'],
+    conv_9_3_3_gpu = tf.nn.conv2d(input=relu_9_3_2_gpu,
+                                   filters=weights['conv_9_3_3_gpu'],
                                    strides=[1, 2, 2, 1],
                                    padding='VALID',
-                                   name='conv_9_3_3_copy')
+                                   name='conv_9_3_3_gpu')
 
-    relu_9_3_3_copy = tf.nn.relu(features=conv_9_3_3_copy,
-                                 name='relu_9_3_3_copy')
+    print('conv_9_3_3_gpu.shape =', conv_9_3_3_gpu.shape)
+
+    relu_9_3_3_gpu = tf.nn.relu(features=conv_9_3_3_gpu,
+                                 name='relu_9_3_3_gpu')
 
     # 39
-    concat_4_copy = tf.concat(
-        values=[max_pooling_9_1_copy, relu_9_2_copy, relu_9_3_3_copy], axis=3, name='concat_4_copy')
+    concat_4_gpu = tf.concat(
+        values=[max_pooling_9_1_gpu, relu_9_2_gpu, relu_9_3_3_gpu], axis=3, name='concat_4_gpu')
+
+    print('concat_4_gpu.shape =', concat_4_gpu.shape)
 
     # 87
 
     # filter_size=3 valid stride=2
-    max_pooling_14_1_copy = tf.nn.max_pool2d(input=concat_4_copy,
+    max_pooling_14_1_gpu = tf.nn.max_pool2d(input=concat_4_gpu,
                                              ksize=[1, 3, 3, 1],
                                              strides=[1, 2, 2, 1],
                                              padding='VALID',
-                                             name='max_pooling_14_1_copy')
+                                             name='max_pooling_14_1_gpu')
 
-    # 192*1*1*768 same stride=1
-    conv_14_2_1_copy = tf.nn.conv2d(input=concat_4_copy,
-                                    filters=weights['conv_14_2_1_copy'],
+    # 192*1*1*672 same stride=1
+    conv_14_2_1_gpu = tf.nn.conv2d(input=concat_4_gpu,
+                                    filters=weights['conv_14_2_1_gpu'],
                                     strides=[1, 1, 1, 1],
                                     padding='SAME',
-                                    name='conv_14_2_1_copy')
+                                    name='conv_14_2_1_gpu')
 
-    relu_14_2_1_copy = tf.nn.relu(features=conv_14_2_1_copy,
-                                  name='relu_14_2_1_copy')
+    relu_14_2_1_gpu = tf.nn.relu(features=conv_14_2_1_gpu,
+                                  name='relu_14_2_1_gpu')
 
     # 320*3*3*192 valid stride=1
-    conv_14_2_2_copy = tf.nn.conv2d(input=relu_14_2_1_copy,
-                                    filters=weights['conv_14_2_2_copy'],
+    conv_14_2_2_gpu = tf.nn.conv2d(input=relu_14_2_1_gpu,
+                                    filters=weights['conv_14_2_2_gpu'],
                                     strides=[1, 2, 2, 1],
                                     padding='VALID',
-                                    name='conv_14_2_2_copy')
+                                    name='conv_14_2_2_gpu')
 
-    relu_14_2_2_copy = tf.nn.relu(features=conv_14_2_2_copy,
-                                name='relu_14_2_2_copy')
+    relu_14_2_2_gpu = tf.nn.relu(features=conv_14_2_2_gpu,
+                                name='relu_14_2_2_gpu')
 
-    # 192*1*1*768 same stride=1
-    conv_14_3_1_copy = tf.nn.conv2d(input=concat_4_copy,
-                                    filters=weights['conv_14_3_1_copy'],
+    # 192*1*1*672 same stride=1
+    conv_14_3_1_gpu = tf.nn.conv2d(input=concat_4_gpu,
+                                    filters=weights['conv_14_3_1_gpu'],
                                     strides=[1, 1, 1, 1],
                                     padding='SAME',
-                                    name='conv_14_3_1_copy')
+                                    name='conv_14_3_1_gpu')
 
-    relu_14_3_1_copy = tf.nn.relu(features=conv_14_3_1_copy,
-                                  name='relu_14_3_1_copy')
-
-    # 192*1*7*192 same stride=1
-    conv_14_3_2_copy = tf.nn.conv2d(input=relu_14_3_1_copy,
-                                    filters=weights['conv_14_3_2_copy'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_14_3_2_copy')
-
-    relu_14_3_2_copy = tf.nn.relu(features=conv_14_3_2_copy,
-                                  name='relu_14_3_2_copy')
-
-    # 192*7*1*192 same stride=1
-    conv_14_3_3_copy = tf.nn.conv2d(input=relu_14_3_2_copy,
-                                    filters=weights['conv_14_3_3_copy'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_14_3_3_copy')
-
-    relu_14_3_3_copy = tf.nn.relu(features=conv_14_3_3_copy,
-                                  name='relu_14_3_3_copy')
+    relu_14_3_1_gpu = tf.nn.relu(features=conv_14_3_1_gpu,
+                                  name='relu_14_3_1_gpu')
 
     # 192*3*3*192 valid stride=2
-    conv_14_3_4_copy = tf.nn.conv2d(input=relu_14_3_3_copy,
-                                    filters=weights['conv_14_3_4_copy'],
+    conv_14_3_4_gpu = tf.nn.conv2d(input=relu_14_3_1_gpu,
+                                    filters=weights['conv_14_3_4_gpu'],
                                     strides=[1, 2, 2, 1],
                                     padding='VALID',
-                                    name='conv_14_3_4_copy')
+                                    name='conv_14_3_4_gpu')
 
-    relu_14_3_4_copy = tf.nn.relu(features=conv_14_3_4_copy,
-                                  name='relu_14_3_4_copy')
+    relu_14_3_4_gpu = tf.nn.relu(features=conv_14_3_4_gpu,
+                                  name='relu_14_3_4_gpu')
 
     # 95
-    concat_9_copy = tf.concat(
-        values=[max_pooling_14_1_copy, relu_14_2_2_copy, relu_14_3_4_copy], axis=3, name='concat_4_copy_copy')
-
-    # 320*1*1*1280 same stride=1
-    conv_15_1_copy = tf.nn.conv2d(input=concat_9_copy,
-                                  filters=weights['conv_15_1_copy'],
-                                  strides=[1, 1, 1, 1],
-                                  padding='SAME',
-                                  name='conv_15_1_copy')
-
-    relu_15_1_copy = tf.nn.relu(features=conv_15_1_copy,
-                                name='relu_15_1_copy')
-
-    # 384*1*1*1280 same stride=1
-    conv_15_2_1_copy = tf.nn.conv2d(input=concat_9_copy,
-                                    filters=weights['conv_15_2_1_copy'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_15_2_1_copy')
-
-    relu_15_2_1_copy = tf.nn.relu(features=conv_15_2_1_copy,
-                                  name='relu_15_2_1_copy')
-
-    # 384*1*3*384 same stride=1
-    conv_15_2_2_1_copy = tf.nn.conv2d(input=relu_15_2_1_copy,
-                                      filters=weights['conv_15_2_2_1_copy'],
-                                      strides=[1, 1, 1, 1],
-                                      padding='SAME',
-                                      name='conv_15_2_2_1_copy')
-
-    relu_15_2_2_1_copy = tf.nn.relu(features=conv_15_2_2_1_copy,
-                                    name='relu_15_2_2_1_copy')
-    # 384*3*1*384 same stride=1
-    conv_15_2_2_2_copy = tf.nn.conv2d(input=relu_15_2_1_copy,
-                                      filters=weights['conv_15_2_2_2_copy'],
-                                      strides=[1, 1, 1, 1],
-                                      padding='SAME',
-                                      name='conv_15_2_2_2_copy')
-
-    relu_15_2_2_2_copy = tf.nn.relu(features=conv_15_2_2_2_copy,
-                                    name='relu_15_2_2_2_copy')
-
-    concat_15_2_3_copy = tf.concat(
-        values=[relu_15_2_2_1_copy, relu_15_2_2_2_copy], axis=3, name='concat_15_2_3_copy')
-
-    # 448*1*1*1280 same stride=1
-    conv_15_3_1_copy = tf.nn.conv2d(input=concat_9_copy,
-                                    filters=weights['conv_15_3_1_copy'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_15_3_1_copy')
-
-    relu_15_3_1_copy = tf.nn.relu(features=conv_15_3_1_copy,
-                                  name='relu_15_3_1_copy')
-
-    # 384*3*3*448 same stride=1
-    conv_15_3_2_copy = tf.nn.conv2d(input=relu_15_3_1_copy,
-                                    filters=weights['conv_15_3_2_copy'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_15_3_2_copy')
-
-    relu_15_3_2_copy = tf.nn.relu(features=conv_15_3_2_copy,
-                                  name='relu_15_3_2_copy')
-
-    # 384*1*3*384 same stride=1
-    conv_15_3_3_1_copy = tf.nn.conv2d(input=relu_15_3_2_copy,
-                                      filters=weights['conv_15_3_3_1_copy'],
-                                      strides=[1, 1, 1, 1],
-                                      padding='SAME',
-                                      name='conv_15_3_3_1_copy')
-
-    relu_15_3_3_1_copy = tf.nn.relu(features=conv_15_3_3_1_copy,
-                                    name='relu_15_3_3_1_copy')
-
-    # 384*3*1*384 same stride=1
-    conv_15_3_3_2_copy = tf.nn.conv2d(input=relu_15_3_2_copy,
-                                      filters=weights['conv_15_3_3_2_copy'],
-                                      strides=[1, 1, 1, 1],
-                                      padding='SAME',
-                                      name='conv_15_3_3_2_copy')
-
-    relu_15_3_3_2_copy = tf.nn.relu(features=conv_15_3_3_2_copy,
-                                    name='relu_15_3_3_2_copy')
-
-    concat_15_3_4_copy = tf.concat(
-        values=[relu_15_3_3_1_copy, relu_15_3_3_2_copy], axis=3, name='concat_15_3_4_copy')
-
-    # filter_size=3 same stride=1
-    average_pool_15_4_1_copy = tf.nn.avg_pool2d(value=concat_9_copy,
-                                                ksize=3,
-                                                strides=[1, 1, 1, 1],
-                                                padding='SAME',
-                                                name='average_pool_15_4_1_copy')
-
-    # 192*1*1*1280 same stride=1
-    conv_15_4_2_copy = tf.nn.conv2d(input=average_pool_15_4_1_copy,
-                                    filters=weights['conv_15_4_2_copy'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_15_4_2_copy')
-
-    relu_15_4_2_copy = tf.nn.relu(features=conv_15_4_2_copy,
-                                  name='relu_15_4_2_copy')
-
-    # 108
-    concat_10_copy = tf.concat(
-        values=[relu_15_1_copy, concat_15_2_3_copy, concat_15_3_4_copy, relu_15_4_2_copy], axis=3, name='concat_10_copy')
+    concat_9_gpu = tf.concat(
+        values=[max_pooling_14_1_gpu, relu_14_2_2_gpu, relu_14_3_4_gpu], axis=3, name='concat_4_gpu_gpu')
 
     # 121
     # filter_size=8 valid stride=2
-    average_pool_17_copy = tf.nn.avg_pool2d(value=concat_10_copy,
+    average_pool_17_gpu = tf.nn.avg_pool2d(value=concat_9_gpu,
                                             ksize=8,
                                             strides=[1, 2, 2, 1],
                                             padding='VALID',
-                                            name='average_pool_17_copy')
+                                            name='average_pool_17_gpu')
 
-    # 1001*1*1*2048
-    conv_17_copy = tf.nn.conv2d(input=average_pool_17_copy,
-                                filters=weights['conv_17_copy'],
+    print('average_pool_17_gpu.shape =', average_pool_17_gpu.shape)
+
+    # 1001*1*1*1280
+    conv_17_gpu = tf.nn.conv2d(input=average_pool_17_gpu,
+                                filters=weights['conv_17_gpu'],
                                 strides=[1, 1, 1, 1],
                                 padding='SAME',
-                                name='conv_17_copy')
+                                name='conv_17_gpu')
 
-    reshape_copy = tf.reshape(conv_17_copy,
+    reshape_gpu = tf.reshape(conv_17_gpu,
                               [-1, 1001],
-                              name='reshape_copy')
+                              name='reshape_gpu')
 
-    logits_copy = reshape_copy
+    logits_gpu = reshape_gpu
 
     predictions = {
         'classes': tf.argmax(input=logits, axis=1), 
-        'classes_copy': tf.argmax(input=logits_copy, axis=1)
+        'classes_gpu': tf.argmax(input=logits_gpu, axis=1)
     }
 
     if mode == tf.estimator.ModeKeys.PREDICT:
         return tf.estimator.EstimatorSpec(mode=mode, predictions=predictions)
 
     loss = tf.losses.sparse_softmax_cross_entropy(
-        labels=labels, logits=logits) + tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits_copy)
+        labels=labels, logits=logits) + tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits_gpu)
 
     if mode == tf.estimator.ModeKeys.TRAIN:
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=0)
@@ -1761,8 +1467,8 @@ def Inception_V3(features, labels, mode):
     eval_metric_ops = {
         'accuracy': tf.metrics.accuracy(
             labels=labels, predictions=predictions['classes']),
-        'accuracy_copy': tf.metrics.accuracy(
-            labels=labels, predictions=predictions['classes_copy'])
+        'accuracy_gpu': tf.metrics.accuracy(
+            labels=labels, predictions=predictions['classes_gpu'])
     }
 
     return tf.estimator.EstimatorSpec(
@@ -1830,7 +1536,7 @@ with tf.Session() as sess:
     output_graph_def = tf.graph_util.convert_variables_to_constants(
         sess=sess,
         input_graph_def=input_graph_def,
-        output_node_names=['reshape', 'reshape_copy']
+        output_node_names=['reshape', 'reshape_gpu']
     )
     import os
     if not os.path.exists(OUTPUT_PATH):
