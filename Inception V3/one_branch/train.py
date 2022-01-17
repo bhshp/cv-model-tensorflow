@@ -115,7 +115,12 @@ def Inception_V3(features, labels, mode):
         'conv_16_3_3_1': tf.Variable(tf.truncated_normal([1, 3, 384, 384], mean=0, stddev=1e-2)),
         'conv_16_3_3_2': tf.Variable(tf.truncated_normal([3, 1, 384, 384], mean=0, stddev=1e-2)),
         'conv_16_4_2': tf.Variable(tf.truncated_normal([1, 1, 2048, 192], mean=0, stddev=1e-2)),
-        'conv_17': tf.Variable(tf.truncated_normal([1, 1, 2048, 1001], mean=0, stddev=1e-2))
+        'conv_17': tf.Variable(tf.truncated_normal([1, 1, 2048, 1001], mean=0, stddev=1e-2)),
+        'conv_add_1': tf.Variable(tf.truncated_normal([1, 1, 1001, 1001], mean=0, stddev=1e-2)),
+        'conv_add_2': tf.Variable(tf.truncated_normal([1, 1, 1001, 1001], mean=0, stddev=1e-2)),
+        'conv_add_3': tf.Variable(tf.truncated_normal([1, 1, 1001, 1001], mean=0, stddev=1e-2)),
+        'conv_add_4': tf.Variable(tf.truncated_normal([1, 1, 1001, 1001], mean=0, stddev=1e-2)),
+        'conv_add_5': tf.Variable(tf.truncated_normal([1, 1, 1001, 1001], mean=0, stddev=1e-2)),
     }
 
     # 32*3*3*3 valid stride=2
@@ -1217,7 +1222,37 @@ def Inception_V3(features, labels, mode):
                            padding='SAME',
                            name='conv_17')
 
-    reshape = tf.reshape(conv_17,
+    conv_add_1 = tf.nn.conv2d(input=conv_17,
+                        filters=weights['conv_add_1'],
+                        strides=[1, 1, 1, 1],
+                        padding='SAME',
+                        name='conv_add_1')
+
+    conv_add_2 = tf.nn.conv2d(input=conv_add_1,
+                        filters=weights['conv_add_2'],
+                        strides=[1, 1, 1, 1],
+                        padding='SAME',
+                        name='conv_add_2')
+
+    conv_add_3 = tf.nn.conv2d(input=conv_add_2,
+                        filters=weights['conv_add_3'],
+                        strides=[1, 1, 1, 1],
+                        padding='SAME',
+                        name='conv_add_3')
+
+    conv_add_4 = tf.nn.conv2d(input=conv_add_3,
+                        filters=weights['conv_add_4'],
+                        strides=[1, 1, 1, 1],
+                        padding='SAME',
+                        name='conv_add_4')
+
+    conv_add_5 = tf.nn.conv2d(input=conv_add_4,
+                        filters=weights['conv_add_5'],
+                        strides=[1, 1, 1, 1],
+                        padding='SAME',
+                        name='conv_add_5')
+
+    reshape = tf.reshape(conv_add_5,
                          [-1, 1001],
                          name='reshape')
 

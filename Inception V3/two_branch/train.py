@@ -122,15 +122,7 @@ def Inception_V3(features, labels, mode):
         'conv_3_gpu': tf.Variable(tf.truncated_normal([3, 3, 32, 64], mean=0, stddev=1e-2)),
         'conv_4_gpu': tf.Variable(tf.truncated_normal([1, 1, 64, 80], mean=0, stddev=1e-2)),
         'conv_5_gpu': tf.Variable(tf.truncated_normal([3, 3, 80, 192], mean=0, stddev=1e-2)),
-        'conv_9_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 192, 384], mean=0, stddev=1e-2)),
-        'conv_9_3_1_gpu': tf.Variable(tf.truncated_normal([1, 1, 192, 64], mean=0, stddev=1e-2)),
-        'conv_9_3_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 64, 96], mean=0, stddev=1e-2)),
-        'conv_9_3_3_gpu': tf.Variable(tf.truncated_normal([3, 3, 96, 96], mean=0, stddev=1e-2)),
-        'conv_14_2_1_gpu': tf.Variable(tf.truncated_normal([1, 1, 672, 192], mean=0, stddev=1e-2)),
-        'conv_14_2_2_gpu': tf.Variable(tf.truncated_normal([3, 3, 192, 320], mean=0, stddev=1e-2)),
-        'conv_14_3_1_gpu': tf.Variable(tf.truncated_normal([1, 1, 672, 192], mean=0, stddev=1e-2)),
-        'conv_14_3_4_gpu': tf.Variable(tf.truncated_normal([3, 3, 192, 192], mean=0, stddev=1e-2)),
-        'conv_17_gpu': tf.Variable(tf.truncated_normal([1, 1, 1184, 1001], mean=0, stddev=1e-2)),
+        'conv_17_gpu': tf.Variable(tf.truncated_normal([1, 1, 192, 1001], mean=0, stddev=1e-2)),
     }
 
     # 32*3*3*3 valid stride=2
@@ -1299,135 +1291,31 @@ def Inception_V3(features, labels, mode):
     # filter_size=3 valid stride=2
     max_pooling_2_gpu = tf.nn.max_pool2d(input=relu_5_gpu,
                                           ksize=3,
-                                          strides=2,
+                                          strides=8,
                                           padding='VALID',
                                           name='max_pooling_2_gpu')
 
     print('max_pooling_2_gpu.shape =', max_pooling_2_gpu.shape)
 
-    concat_2_gpu = max_pooling_2_gpu
+    # # filter_size=3 valid stride=2
+    # max_pooling_9_1_gpu = tf.nn.max_pool2d(input=max_pooling_2_gpu,
+    #                                         ksize=3,
+    #                                         strides=2,
+    #                                         padding='VALID',
+    #                                         name='max_pooling_9_1_gpu')
 
-    # filter_size=3 valid stride=2
-    max_pooling_9_1_gpu = tf.nn.max_pool2d(input=concat_2_gpu,
-                                            ksize=[1, 3, 3, 1],
-                                            strides=[1, 2, 2, 1],
-                                            padding='VALID',
-                                            name='max_pooling_9_1_gpu')
-
-    print('max_pooling_9_1_gpu.shape =', max_pooling_9_1_gpu.shape)
-
-    # 384*3*3*192 valid stride=2
-    conv_9_2_gpu = tf.nn.conv2d(input=concat_2_gpu,
-                                 filters=weights['conv_9_2_gpu'],
-                                 strides=[1, 2, 2, 1],
-                                 padding='VALID',
-                                 name='conv_9_2_gpu')
-
-    print('conv_9_2_gpu.shape =', conv_9_2_gpu.shape)
-
-    relu_9_2_gpu = tf.nn.relu(features=conv_9_2_gpu,
-                               name='relu_9_2_gpu')
-
-    # 64*1*1*288 same stride=1
-    conv_9_3_1_gpu = tf.nn.conv2d(input=concat_2_gpu,
-                                   filters=weights['conv_9_3_1_gpu'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_9_3_1_gpu')
-
-    print('conv_9_3_1_gpu.shape =', conv_9_3_1_gpu.shape)
-
-    relu_9_3_1_gpu = tf.nn.relu(features=conv_9_3_1_gpu,
-                                 name='relu_9_3_1_gpu')
-
-    # 96*3*3*64 same stride=1
-    conv_9_3_2_gpu = tf.nn.conv2d(input=relu_9_3_1_gpu,
-                                   filters=weights['conv_9_3_2_gpu'],
-                                   strides=[1, 1, 1, 1],
-                                   padding='SAME',
-                                   name='conv_9_3_2_gpu')
-
-    print('conv_9_3_2_gpu.shape =', conv_9_3_2_gpu.shape)
-
-    relu_9_3_2_gpu = tf.nn.relu(features=conv_9_3_2_gpu,
-                                 name='relu_9_3_2_gpu')
-
-    # 96*3*3*96 valid stride=2
-    conv_9_3_3_gpu = tf.nn.conv2d(input=relu_9_3_2_gpu,
-                                   filters=weights['conv_9_3_3_gpu'],
-                                   strides=[1, 2, 2, 1],
-                                   padding='VALID',
-                                   name='conv_9_3_3_gpu')
-
-    print('conv_9_3_3_gpu.shape =', conv_9_3_3_gpu.shape)
-
-    relu_9_3_3_gpu = tf.nn.relu(features=conv_9_3_3_gpu,
-                                 name='relu_9_3_3_gpu')
-
-    # 39
-    concat_4_gpu = tf.concat(
-        values=[max_pooling_9_1_gpu, relu_9_2_gpu, relu_9_3_3_gpu], axis=3, name='concat_4_gpu')
-
-    print('concat_4_gpu.shape =', concat_4_gpu.shape)
-
-    # 87
-
-    # filter_size=3 valid stride=2
-    max_pooling_14_1_gpu = tf.nn.max_pool2d(input=concat_4_gpu,
-                                             ksize=[1, 3, 3, 1],
-                                             strides=[1, 2, 2, 1],
-                                             padding='VALID',
-                                             name='max_pooling_14_1_gpu')
-
-    # 192*1*1*672 same stride=1
-    conv_14_2_1_gpu = tf.nn.conv2d(input=concat_4_gpu,
-                                    filters=weights['conv_14_2_1_gpu'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_14_2_1_gpu')
-
-    relu_14_2_1_gpu = tf.nn.relu(features=conv_14_2_1_gpu,
-                                  name='relu_14_2_1_gpu')
-
-    # 320*3*3*192 valid stride=1
-    conv_14_2_2_gpu = tf.nn.conv2d(input=relu_14_2_1_gpu,
-                                    filters=weights['conv_14_2_2_gpu'],
-                                    strides=[1, 2, 2, 1],
-                                    padding='VALID',
-                                    name='conv_14_2_2_gpu')
-
-    relu_14_2_2_gpu = tf.nn.relu(features=conv_14_2_2_gpu,
-                                name='relu_14_2_2_gpu')
-
-    # 192*1*1*672 same stride=1
-    conv_14_3_1_gpu = tf.nn.conv2d(input=concat_4_gpu,
-                                    filters=weights['conv_14_3_1_gpu'],
-                                    strides=[1, 1, 1, 1],
-                                    padding='SAME',
-                                    name='conv_14_3_1_gpu')
-
-    relu_14_3_1_gpu = tf.nn.relu(features=conv_14_3_1_gpu,
-                                  name='relu_14_3_1_gpu')
-
-    # 192*3*3*192 valid stride=2
-    conv_14_3_4_gpu = tf.nn.conv2d(input=relu_14_3_1_gpu,
-                                    filters=weights['conv_14_3_4_gpu'],
-                                    strides=[1, 2, 2, 1],
-                                    padding='VALID',
-                                    name='conv_14_3_4_gpu')
-
-    relu_14_3_4_gpu = tf.nn.relu(features=conv_14_3_4_gpu,
-                                  name='relu_14_3_4_gpu')
-
-    # 95
-    concat_9_gpu = tf.concat(
-        values=[max_pooling_14_1_gpu, relu_14_2_2_gpu, relu_14_3_4_gpu], axis=3, name='concat_4_gpu_gpu')
+    # # filter_size=3 valid stride=2
+    # max_pooling_14_1_gpu = tf.nn.max_pool2d(input=max_pooling_9_1_gpu,
+    #                                          ksize=3,
+    #                                          strides=2,
+    #                                          padding='VALID',
+    #                                          name='max_pooling_14_1_gpu')
 
     # 121
     # filter_size=8 valid stride=2
-    average_pool_17_gpu = tf.nn.avg_pool2d(value=concat_9_gpu,
+    average_pool_17_gpu = tf.nn.avg_pool2d(value=max_pooling_2_gpu,
                                             ksize=8,
-                                            strides=[1, 2, 2, 1],
+                                            strides=2,
                                             padding='VALID',
                                             name='average_pool_17_gpu')
 

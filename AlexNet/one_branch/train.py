@@ -9,10 +9,10 @@ print(tf.__version__)
 if tf.__version__.startswith('2.'):
     tf = tf.compat.v1
     tf.disable_v2_behavior()
-tf.logging.set_verbosity(tf.logging.INFO)
 tf.disable_eager_execution()
 
-IMAGE_SIZE = 115
+IMAGE_SIZE = 300
+REAL_IMAGE_SIZE = 227
 DATA_PATH = './../../data'
 INPUT_CKPT_PATH = './model/model.ckpt-1'
 OUTPUT_PATH = './result'
@@ -22,7 +22,7 @@ OUTPUT_PATH = './result'
 def AlexNet(features, labels, mode):
     weights = {
         # y
-        'wc1': tf.Variable(tf.truncated_normal([7, 7, 3, 96],     stddev=0.01), name='wc1'),
+        'wc1': tf.Variable(tf.truncated_normal([11, 11, 3, 96],     stddev=0.01), name='wc1'),
         'wc2': tf.Variable(tf.truncated_normal([5, 5, 96, 256],     stddev=0.01), name='wc2'),
         'wc3': tf.Variable(tf.truncated_normal([3, 3, 256, 384],    stddev=0.01), name='wc3'),
         'wc4': tf.Variable(tf.truncated_normal([3, 3, 384, 384],    stddev=0.01), name='wc4'),
@@ -42,10 +42,14 @@ def AlexNet(features, labels, mode):
                              [-1, IMAGE_SIZE, IMAGE_SIZE, 3],
                              name='data')
 
+    input_layer = tf.image.resize_bilinear(images=input_layer, size=[REAL_IMAGE_SIZE * 2, REAL_IMAGE_SIZE * 2], align_corners=False, name='data')
+
+    max_pooling0 = tf.nn.max_pool(input_layer, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='VALID', name='max_pooling0')
+
     # 1st conv layer
-    conv1 = tf.nn.conv2d(input=input_layer,
+    conv1 = tf.nn.conv2d(input=max_pooling0,
                          filters=weights['wc1'],
-                         strides=[1, 2, 2, 1],
+                         strides=[1, 4, 4, 1],
                          padding='VALID',
                          name='conv1')
 
@@ -189,15 +193,14 @@ def get_data():
     with open(DATA_PATH + '/batches.meta', 'rb') as f:
         labels = pickle.load(f, encoding='bytes')[b'label_names']
 
-    for i in range(1, 1 + 1):
-        with open(DATA_PATH + '/data_batch_' + str(i), 'rb') as f:
-            train_batches = pickle.load(f, encoding='bytes')
-            train_images.extend(train_batches[b'data'])
-            train_labels.extend(train_batches[b'labels'])
+    with open(DATA_PATH + '/data_batch_1', 'rb') as f:
+        train_batches = pickle.load(f, encoding='bytes')
+        train_images.extend(train_batches[b'data'][:20])
+        train_labels.extend(train_batches[b'labels'][:20])
 
     def preprocess_images(image):
-        image.resize((32, 32, 3))
-        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32)
+        image.resize(32, 32, 3)
+        return cv2.resize(image, (IMAGE_SIZE, IMAGE_SIZE)).astype(np.float32) / 255.0
 
     train_images = [preprocess_images(image) for image in train_images]
 
@@ -206,9 +209,8 @@ def get_data():
 
 labels, train_images, train_labels = get_data()
 
-eval_images, eval_labels = train_images[:500], train_labels[:500]
-train_images, train_labels = train_images[500:], train_labels[500:]
-
+eval_images, eval_labels = train_images[:5], train_labels[:5]
+train_images, train_labels = train_images[5:], train_labels[5:]
 classifier = tf.estimator.Estimator(
     model_fn=AlexNet, model_dir='./model'
 )

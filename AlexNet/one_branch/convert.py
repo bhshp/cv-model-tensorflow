@@ -33,5 +33,5 @@ def convert_to_quant_tflite():
         f.write(tflite_model)
 
 if __name__ == '__main__':
-    convert_to_tflite()
-    # convert_to_quant_tflite()
+    # convert_to_tflite()
+    convert_to_quant_tflite()

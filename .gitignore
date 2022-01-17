@@ -6,6 +6,7 @@ Inception V3/one_branch/model/
 Inception V3/one_branch/result/
 Inception V3/two_branch/model/
 Inception V3/two_branch/result/
+model/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
